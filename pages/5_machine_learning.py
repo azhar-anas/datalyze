@@ -4,7 +4,7 @@ import io
 from assets.styles.styler import apply_global_style
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
-from models.classification_models import logr_param_selector, dt_c_param_selector, rf_c_param_selector, knn_c_param_selector, svc_param_selector, nb_c_param_selector, ada_c_param_selector, gb_c_param_selector, mlp_c_param_selector, get_hyperparams_config_range, get_best_model
+from models.classification_models import logr_param_selector, dt_c_param_selector, rf_c_param_selector, knn_c_param_selector, svc_param_selector, nb_c_param_selector, ada_c_param_selector, gb_c_param_selector, mlp_c_param_selector
 from models.regression_models import lr_param_selector, lasso_param_selector, ridge_param_selector, dt_r_param_selector, rf_r_param_selector, knn_r_param_selector, svr_param_selector, ada_r_param_selector, gb_r_param_selector, mlp_r_param_selector
 from utils.data_visualization import display_dataset, plot_confusion_matrix, plot_classification_metrics, plot_roc_curve, plot_precision_recall_curve, display_regression_metrics, plot_predicted_vs_actual, plot_predicted_vs_residuals, plot_kde
 
