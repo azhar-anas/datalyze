@@ -12,9 +12,7 @@ with col2:
 st.title('Welcome to Datalyze!')
 st.write('**Datalyze** is your all-in-one data analytics platform, designed to transform raw data into meaningful insights with ease. Whether you\'re an analyst, a data scientist, or a business professional, Datalyze empowers you to explore, clean, prepare, and model your data effortlessly. With an intuitive interface, automated processes, and machine learning capabilities, you can make data-driven decisions faster than ever before.')
     
-# Create Tabs
 tab1, tab2 = st.tabs(["Why Datalyze?", "Key Features"])
-
 # Tab 1: Why Datalyze?
 with tab1:
     st.write('Datalyze is built with efficiency, accuracy, and user experience in mind. Here\'s why it stands out:')
@@ -24,7 +22,7 @@ with tab1:
     - **Comprehensive & Fast**: : Automates workflows from data to insights for **fast analysis**.
     - **Advanced AI & ML**: Select various machine learning models for predictive analysis powered by **Scikit-Learn**.  
     - **Hyperparameter Tuning**: Optimize model performance with **Tree-structured Parzen Estimator (TPE)** algorithm.
-    - **Export & Share**: Download reports, models, and visualizations for further analysis or presentation.
+    - **Export & Share**: **Download reports, models, and visualizations** for further analysis or presentation.
     ''')
 
 # Tab 2: Key Features
@@ -37,7 +35,7 @@ with tab2:
         st.info('''
         - **Instant Data Preview**: View the dataset to confirm data structure before proceeding.
         - **Automatic Data Recognition**: The system intelligently detects dataset information and structure.
-        - **Data Deletion**: Need to start fresh? Delete the uploaded dataset with a single click.  
+        - **Data Revert & Deletion**: Need to start fresh? Revert back or delete the uploaded dataset with a single click.  
         ''')
     with col3:
         # 2. Exploratory Data Analysis
