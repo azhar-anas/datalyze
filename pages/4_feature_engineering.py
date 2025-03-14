@@ -34,7 +34,7 @@ else: # Main Code Start From Here
                 del df_processed
                 st.rerun()
 
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
     
@@ -95,7 +95,7 @@ else: # Main Code Start From Here
                         del df_processed
                         st.rerun()
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
             
@@ -116,7 +116,7 @@ else: # Main Code Start From Here
                 del df_processed
                 st.rerun()
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')        
         display_dataset(df)
     
@@ -147,6 +147,6 @@ else: # Main Code Start From Here
                         del df_processed
                         st.rerun()
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')          
         display_dataset(df)    
