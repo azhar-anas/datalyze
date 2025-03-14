@@ -10,15 +10,19 @@ def display_dataset(df):
     col1, col2 = st.columns([7, 3])
     with col1:
         st.dataframe(df, use_container_width=True)
-        with st.expander('Show Descriptive Statistics'):
-            st.write(df.describe())  
     with col2:
         data_info = pd.DataFrame({
             'Data Type': df.dtypes,
             'Unique Values': df.nunique(),
         })
         st.write(data_info, use_container_width=True)
-        st.write('Dataset Shape:', df.shape)
+        
+    col1, col2 = st.columns([7, 3])
+    with col1:
+        with st.expander('Show Descriptive Statistics'):
+            st.write(df.describe()) 
+    with col2:
+        st.write('Dataset Shape: ', df.shape)
     
 def generate_eda_report(df, df_report):
     if df_report['report_status'] == False:
