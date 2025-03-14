@@ -24,7 +24,7 @@ def find_outliers(df):
         num_outliers = outliers.shape[0]
         percent_outliers = (num_outliers / df.shape[0]) * 100
         
-        fig, ax = plt.subplots(figsize=(10, 5))
+        fig, ax = plt.subplots(figsize=(12, 5))
         sns.boxplot(data=numeric_df, ax=ax)
         ax.set_xlabel('Numerical Features')
         ax.set_ylabel('Values')
