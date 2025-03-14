@@ -20,7 +20,6 @@ if 'current_dataset' not in st.session_state: # Ensure that the dataset has been
 elif st.session_state['current_dataset']['df_file'].isnull().sum().sum() > 0: # Ensure that the dataset does not contain missing values
     st.warning(':material/warning: **Your \'Current Dataset\' contains missing values**. Please handle them on the **Data Cleaning** page first.')
 else: # Main Code Start From Here
-    st.write(''); st.write('')
     st.subheader(':material/manufacturing: Data Configuration')
     st.write('Configure your dataset for training by selecting the input features (**X**) and target variable (**Y**). Adjust the **train-test split ratio** and apply a **scaling method** (Min-Max Normalization, Z-Score Standardization, or Robust Scaling) to optimize model performance. Proper data configuration ensures your model is well-prepared for training.')
     
