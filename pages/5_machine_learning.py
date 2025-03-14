@@ -46,7 +46,7 @@ else: # Main Code Start From Here
             test_size = st.slider('**Test Size**', min_value=0.1, max_value=0.9, value=1-train_size, disabled=True)
             random_state = st.number_input('**Random State (0 - 100)** -> Control Splitting Reproducibility', min_value=0, max_value=100, step=1, value=42)
             # 3. Feature Scaling
-            normalization_method = st.radio('**Select feature scaling method**', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
+            normalization_method = st.radio('**Select feature scaling method** (Applied only numeric data type)', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
             
             # Apply Changes Button
             if st.button(label='Apply Changes', icon=':material/manufacturing:', use_container_width=True):
