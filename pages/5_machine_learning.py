@@ -38,19 +38,15 @@ else: # Main Code Start From Here
         with st.container(border=True, key='data_config_container'):
             display_dataset(selected_df, border=False)
             st.write('')
-            col1, col2 = st.columns(2)
-            with col1:
-                # 2. Select Features
-                features = st.multiselect('**Select independent features (X variables)**', selected_df.columns, selected_df.columns)
-                target = st.selectbox('**Select dependent feature (Y variable)**', selected_df.columns)
-            with col2:
-                # 3. Data Splitting
-                train_size = st.slider('**Train Size**', min_value=0.1, max_value=0.9, step=0.05, value=0.8)
-                test_size = st.slider('**Test Size**', min_value=0.1, max_value=0.9, value=1-train_size, disabled=True)
-                random_state = st.number_input('**Random State (0 - 100)** -> Control Splitting Reproducibility', min_value=0, max_value=100, step=1, value=42)
-                
-                # 4. Feature Scaling
-                normalization_method = st.selectbox('**Select feature scaling method**', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
+            # 1. Select Features
+            features = st.multiselect('**Select independent features (X variables)**', selected_df.columns, selected_df.columns)
+            target = st.selectbox('**Select dependent feature (Y variable)**', selected_df.columns)
+            # 2. Data Splitting
+            train_size = st.slider('**Train Size**', min_value=0.1, max_value=0.9, step=0.05, value=0.8)
+            test_size = st.slider('**Test Size**', min_value=0.1, max_value=0.9, value=1-train_size, disabled=True)
+            random_state = st.number_input('**Random State (0 - 100)** -> Control Splitting Reproducibility', min_value=0, max_value=100, step=1, value=42)
+            # 3. Feature Scaling
+            normalization_method = st.radio('**Select feature scaling method**', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
             
             # Apply Changes Button
             if st.button(label='Apply Changes', icon=':material/manufacturing:', use_container_width=True):
