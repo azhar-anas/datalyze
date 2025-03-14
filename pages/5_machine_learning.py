@@ -35,9 +35,9 @@ else: # Main Code Start From Here
     if selected_df.isnull().sum().sum() > 0:
         st.error(':material/error: **Your \'Raw Dataset\' contains missing values**. You can\'t proceed with machine learning analysis with this dataset.')
     else:
-        display_dataset(selected_df)
-            
         with st.container(border=True, key='data_config_container'):
+            display_dataset(selected_df, border=False)
+            st.write('')
             col1, col2 = st.columns(2)
             with col1:
                 # 2. Select Features
