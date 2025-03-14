@@ -33,7 +33,7 @@ else: # Main Code Start From Here
     display_dataset(selected_df)
     
     # Generate EDA Report
-    st.write('---')
+    st.write('')
     st.subheader(':material/description: **Generated EDA Report**')
     generate_eda_report(selected_df, df_report)
     del selected_df, df_report, generate_eda_report
