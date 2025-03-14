@@ -30,7 +30,7 @@ if 'raw_dataset' in st.session_state:
         dataset_option = st.selectbox('**Select Dataset to View**', ['Raw Dataset', 'Current Dataset'])
         
     if dataset_option == 'Raw Dataset':
-        st.write(''); st.write('')
+        st.write('')
         df = st.session_state['raw_dataset']['df_file'].copy()
         display_dataset(df)
         del df
@@ -43,7 +43,7 @@ if 'raw_dataset' in st.session_state:
             st.rerun()
         
     elif dataset_option == 'Current Dataset':
-        st.write(''); st.write('')
+        st.write('')
         df = st.session_state['current_dataset']['df_file'].copy()
         display_dataset(df)
         del df
