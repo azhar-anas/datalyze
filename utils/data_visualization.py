@@ -6,23 +6,24 @@ from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, precision_recall_curve, mean_squared_error, root_mean_squared_error, mean_absolute_error, r2_score
 
-def display_dataset(df):
-    col1, col2 = st.columns([7, 3])
-    with col1:
-        st.dataframe(df, use_container_width=True)
-    with col2:
-        data_info = pd.DataFrame({
-            'Data Type': df.dtypes,
-            'Unique Values': df.nunique(),
-        })
-        st.write(data_info, use_container_width=True)
+def display_dataset(df, border=True):
+    with st.container(border=border):
+        col1, col2 = st.columns([7, 3])
+        with col1:
+            st.dataframe(df, use_container_width=True)
+        with col2:
+            data_info = pd.DataFrame({
+                'Data Type': df.dtypes,
+                'Unique Values': df.nunique(),
+            })
+            st.write(data_info, use_container_width=True)
         
-    col1, col2 = st.columns([7, 3])
-    with col1:
-        with st.expander('Show Descriptive Statistics'):
-            st.write(df.describe()) 
-    with col2:
-        st.write('Dataset Shape: ', df.shape)
+        col1, col2 = st.columns([7, 3])
+        with col1:
+            with st.expander('Show Descriptive Statistics'):
+                st.write(df.describe()) 
+        with col2:
+            st.write('Dataset Shape: ', df.shape)
     
 def generate_eda_report(df, df_report):
     if df_report['report_status'] == False:
