@@ -43,7 +43,6 @@ else: # Main Code Start From Here
                     except Exception as e:
                         st.error(f':material/error: **Data type cannot be changed for feature** \'{column}\'. {e}')
                         success = False
-                        del df_processed
                 if success:
                     st.session_state['current_dataset']['df_file'] = df_processed
                     st.session_state['current_dataset']['report_status'] = False
