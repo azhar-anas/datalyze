@@ -50,7 +50,7 @@ else: # Main Code Start From Here
                     del df_processed, success
                     st.rerun()
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
     
@@ -87,7 +87,7 @@ else: # Main Code Start From Here
         else:
             st.success(':material/task_alt: No missing value found')
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
     
@@ -111,7 +111,7 @@ else: # Main Code Start From Here
         else:
             st.success(':material/task_alt: No duplicate row found')
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
     
@@ -145,6 +145,6 @@ else: # Main Code Start From Here
                 del df_original, df_numeric, Q1, Q3, IQR, df_numeric_processed, df_processed
                 st.rerun()
         
-        st.write('---')
+        st.write('')
         st.subheader(':material/table: Current Dataset')
         display_dataset(df)
