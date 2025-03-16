@@ -121,12 +121,12 @@ else: # Main Code Start From Here
         
         outliers, outlier_plot, num_outliers, percent_outliers = find_outliers(df)
         st.write(f'**Number of outliers: {num_outliers}/{df.shape[0]} ({percent_outliers:.2f}%)**')
-        if outlier_plot:
+        if outlier_plot and not outliers.empty:
             st.pyplot(outlier_plot)
             st.write('')
         st.dataframe(outliers, use_container_width=True)
         
-        if st.session_state['outliers_removed'] is True:
+        if st.session_state['outliers_removed'] is True or outliers.empty:
             st.success(':material/task_alt: No outlier found')
         else:
             if st.button(label='Delete Outliers', icon=':material/mop:'):
