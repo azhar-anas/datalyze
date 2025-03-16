@@ -91,7 +91,7 @@ def plot_precision_recall_curve(model, selected_x, selected_y):
     precision, recall, _ = precision_recall_curve(selected_y, y_pred_proba)
     auc_score = auc(recall, precision)
     fig, ax = plt.subplots()
-    ax.plot(recall, precision, color='blue', lw=2, label=f'Precision-Recall curve (AUC = {auc_score:.3f})')
+    ax.plot(recall, precision, color='blue', lw=2, label=f'Precision-Recall curve (AP = {auc_score:.3f})')
     ax.plot([0, 1], [1, 0], color='gray', lw=2, linestyle='--')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
