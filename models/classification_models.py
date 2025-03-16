@@ -553,6 +553,7 @@ def get_c_param_range(model_name):
         # Input Parameters
         activation_range = st.multiselect('**Activation** -> Activation function for the hidden layer', ['identity', 'logistic', 'tanh', 'relu'], default=['identity', 'logistic', 'tanh', 'relu'])
         solver_range = st.multiselect('**Solver** -> The solver for weight optimization', ['lbfgs', 'sgd', 'adam'], default=['lbfgs', 'sgd', 'adam'])
+        learning_rate = st.multiselect('**Learning Rate** -> The learning rate schedule for weight updates', ['constant', 'invscaling', 'adaptive'], default=['constant', 'adaptive'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
@@ -575,6 +576,7 @@ def get_c_param_range(model_name):
         params_range = {
             'activation': activation_range,
             'solver': solver_range,
+            'learning_rate': learning_rate,
             'n_layers': [N_layers_0, N_layers_1],
             'neurons': [neurons_0, neurons_1],
             'learning_rate_init': [learning_rate_init_0, learning_rate_init_1],
@@ -582,7 +584,7 @@ def get_c_param_range(model_name):
             'max_iter': [max_iter_0, max_iter_1],
             'random_state': random_state
         }
-        del activation_range, solver_range, N_layers_0, N_layers_1, neurons_0, neurons_1, learning_rate_init_0, learning_rate_init_1, alpha_0, alpha_1, max_iter_0, max_iter_1, random_state
+        del activation_range, solver_range, learning_rate, N_layers_0, N_layers_1, neurons_0, neurons_1, learning_rate_init_0, learning_rate_init_1, alpha_0, alpha_1, max_iter_0, max_iter_1, random_state
     
     return params_range
 
@@ -720,12 +722,13 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
         def objective(trial):
             activation = trial.suggest_categorical('activation', params_range['activation'])
             solver = trial.suggest_categorical('solver', params_range['solver'])
+            learning_rate = trial.suggest_categorical('learning_rate', params_range['learning_rate'])
             n_layers = trial.suggest_int('n_layers', params_range['n_layers'][0], params_range['n_layers'][1])
             neurons = [trial.suggest_int(f'n_neurons_{i}', params_range['neurons'][0], params_range['neurons'][1]) for i in range(n_layers)]
             learning_rate_init = trial.suggest_float('learning_rate_init', params_range['learning_rate_init'][0], params_range['learning_rate_init'][1], log=True)
             alpha = trial.suggest_float('alpha', params_range['alpha'][0], params_range['alpha'][1], log=True)
             max_iter = trial.suggest_int('max_iter', params_range['max_iter'][0], params_range['max_iter'][1])
-            model = MLPClassifier(activation=activation, solver=solver, hidden_layer_sizes=tuple(neurons), learning_rate_init=learning_rate_init, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
+            model = MLPClassifier(activation=activation, solver=solver, learning_rate=learning_rate, hidden_layer_sizes=tuple(neurons), learning_rate_init=learning_rate_init, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
