@@ -4,8 +4,8 @@ import io
 from assets.styles.styler import apply_global_style
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
-from models.classification_models import logr_param_selector, dt_c_param_selector, rf_c_param_selector, knn_c_param_selector, svc_param_selector, nb_c_param_selector, ada_c_param_selector, gb_c_param_selector, mlp_c_param_selector
-from models.regression_models import lr_param_selector, lasso_param_selector, ridge_param_selector, dt_r_param_selector, rf_r_param_selector, knn_r_param_selector, svr_param_selector, ada_r_param_selector, gb_r_param_selector, mlp_r_param_selector
+from models.classification_models import logr_param_selector, dt_c_param_selector, rf_c_param_selector, knn_c_param_selector, svc_param_selector, nb_c_param_selector, ada_c_param_selector, gb_c_param_selector, mlp_c_param_selector, get_c_param_range, get_best_c_model
+from models.regression_models import lr_param_selector, lasso_param_selector, ridge_param_selector, dt_r_param_selector, rf_r_param_selector, knn_r_param_selector, svr_param_selector, ada_r_param_selector, gb_r_param_selector, mlp_r_param_selector, get_r_param_range, get_best_r_model
 from utils.data_visualization import display_dataset, plot_confusion_matrix, plot_classification_metrics, plot_roc_curve, plot_precision_recall_curve, display_regression_metrics, plot_predicted_vs_actual, plot_predicted_vs_residuals, plot_kde
 
 # Page Style
@@ -34,7 +34,7 @@ else: # Main Code Start From Here
     # Check for missing values on Raw Dataset
     if selected_df.isnull().sum().sum() > 0:
         st.error(':material/error: **Your \'Raw Dataset\' contains missing values**. You can\'t proceed with machine learning analysis with this dataset.')
-    else:
+    else:   
         with st.container(border=True, key='data_config_container'):
             display_dataset(selected_df, border=False)
             st.write('')
@@ -155,7 +155,42 @@ else: # Main Code Start From Here
 
         with tab2:
             with st.container(border=True, key='model_tuning_container'):
-                st.error('**Error**: Hyperparameter Tuning is not available yet. Please use manual model selection for now.')
+                model_selection_type = 'Hyperparameter Tuning'
+                if ml_problem == 'Classification (2 Classes)':
+                    param_range = get_c_param_range(model_choice)
+                    cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
+                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision'])
+                    n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
+                    param_range['cv'] = cv
+                    param_range['scoring'] = scoring
+                    param_range['n_trials'] = n_trials
+
+                else:
+                    param_range = get_r_param_range(model_choice)
+                    cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
+                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['neg_mean_squared_error', 'neg_root_mean_squared_error', 'neg_mean_absolute_error', 'r2'])
+                    n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
+                    param_range['cv'] = cv
+                    param_range['scoring'] = scoring
+                    param_range['n_trials'] = n_trials
+                
+                if st.button('Run Hyperparameter Tuning and Train Model', icon=':material/autorenew:', use_container_width=True):
+                    if st.session_state['dataset_split']['x_train'] is None:
+                        st.error(':material/error: **Please split the data before training the model**.')
+                    elif ml_problem == 'Classification (2 Classes)' and st.session_state['dataset_split']['y_train'].dtype not in ['bool', 'boolean']:
+                        st.error(':material/error: **Selected dependent feature must be boolean type for classification problem**.')
+                    elif any(isinstance(value, list) and not value for value in param_range.values()):
+                        st.error(':material/error: **Please fill in all the hyperparameter tuning values**.')
+                    else:
+                        if ml_problem == 'Classification (2 Classes)':
+                            model = get_best_c_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                        else:
+                            model = get_best_r_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                        
+                        model.fit(st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                        st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
+                        st.success('Model has been tuned and trained successfully with Tree-structured Parzen Estimator (TPE) algorithm.')
+                        del model
                             
     # C. Model Performance
     st.write(''); st.write('')
