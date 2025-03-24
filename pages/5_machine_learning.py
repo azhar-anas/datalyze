@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 import io
+import gc
 from assets.styles.styler import apply_global_style
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
@@ -82,6 +83,7 @@ else: # Main Code Start From Here
                     st.write(f'Training Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_train.shape, y_train.shape)
                     st.write(f'Test Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_test.shape, y_test.shape)
                     del processed_df, x_train, x_test, y_train, y_test, X, y, numeric_cols, scaler, scaled_status
+                    gc.collect()
         
         # B. Model Selection
         st.write(''); st.write('')
@@ -152,6 +154,7 @@ else: # Main Code Start From Here
                         st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
                         st.success(':material/task_alt: Model has been trained successfully')
                         del model
+                        gc.collect()
 
         with tab2:
             with st.container(border=True, key='model_tuning_container'):
@@ -191,6 +194,7 @@ else: # Main Code Start From Here
                         st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
                         st.success('Model has been tuned and trained successfully with Tree-structured Parzen Estimator (TPE) algorithm.')
                         del model
+                        gc.collect()
                             
     # C. Model Performance
     st.write(''); st.write('')
@@ -207,6 +211,7 @@ else: # Main Code Start From Here
         model_params = model_detail['model_params']
         
         used_dataset = model_detail['used_dataset']
+        target = used_dataset['y_train'].name
         x_train = used_dataset['x_train']
         y_train = used_dataset['y_train']
         x_test = used_dataset['x_test']
