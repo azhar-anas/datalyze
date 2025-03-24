@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import gc
 from assets.styles.styler import apply_global_style
 from utils.data_visualization import display_dataset
 
@@ -32,6 +33,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['report_status'] = False
                 st.session_state['current_dataset']['report_file'] = None
                 del df_processed
+                gc.collect()
                 st.rerun()
 
         st.write('')
@@ -75,6 +77,7 @@ else: # Main Code Start From Here
                         st.session_state['current_dataset']['report_status'] = False
                         st.session_state['current_dataset']['report_file'] = None
                         del df_processed
+                        gc.collect()
                         st.rerun()
             
             elif operation_type == 'Polynomial':
@@ -93,6 +96,7 @@ else: # Main Code Start From Here
                         st.session_state['current_dataset']['report_status'] = False
                         st.session_state['current_dataset']['report_file'] = None
                         del df_processed
+                        gc.collect()
                         st.rerun()
         
         st.write('')
@@ -114,6 +118,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['report_status'] = False
                 st.session_state['current_dataset']['report_file'] = None
                 del df_processed
+                gc.collect()
                 st.rerun()
         
         st.write('')
@@ -145,6 +150,7 @@ else: # Main Code Start From Here
                         st.session_state['current_dataset']['report_status'] = False
                         st.session_state['current_dataset']['report_file'] = None
                         del df_processed
+                        gc.collect()
                         st.rerun()
         
         st.write('')
