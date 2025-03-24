@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import gc
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, precision_recall_curve, mean_squared_error, root_mean_squared_error, mean_absolute_error, r2_score
@@ -24,15 +25,28 @@ def display_dataset(df, border=True):
                 st.write(df.describe()) 
         with col2:
             st.write('Dataset Shape: ', df.shape)
+    del df, data_info
+    gc.collect()
     
 def generate_eda_report(df, df_report):
+    df_type = df_report['df_type']
     if df_report['report_status'] == False:
-        df_type = df_report['df_type']
         st.session_state[df_type]['report_file'] = ProfileReport(df, title='Pandas Profiling Report', explorative=True)
         st.session_state[df_type]['report_status'] = True
-        return st_profile_report(st.session_state[df_type]['report_file'])
-    else:
-        return st_profile_report(df_report['report_file'])
+    
+    st_profile_report(report=st.session_state[df_type]['report_file'])
+    
+    export_html = st.session_state[df_type]['report_file'].to_html()
+    st.download_button(
+        label='Download EDA Report', 
+        icon=':material/download:', 
+        data=export_html, 
+        file_name=f'eda_report_{df_type}.html', 
+        key='eda_report', 
+        use_container_width=True
+    )
+    del df, df_report
+    gc.collect()
     
 def plot_confusion_matrix(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
