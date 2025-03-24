@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import gc
 from assets.styles.styler import apply_global_style
 from utils.data_visualization import display_dataset
 
@@ -23,6 +24,7 @@ with col1:
         st.session_state['dataset_split'] = {'x_train': None, 'x_test': None, 'y_train': None, 'y_test': None, 'train_size': None, 'is_scaled': False, 'norm_method': None}
         st.session_state['model_detail'] = {'train_status': False, 'model_selection': None, 'problem': None, 'model': None, 'model_name': None, 'model_params': None, 'used_dataset': None}
         del df
+        gc.collect()
         
 # Display Dataset
 if 'raw_dataset' in st.session_state:
@@ -34,12 +36,15 @@ if 'raw_dataset' in st.session_state:
         df = st.session_state['raw_dataset']['df_file'].copy()
         display_dataset(df)
         del df
+        gc.collect()
         if st.button('Delete All Datasets', icon=':material/delete:'): # Delete Button
             del st.session_state['raw_dataset']
             del st.session_state['current_dataset']
             del st.session_state['outliers_removed']
             del st.session_state['dataset_split']
             del st.session_state['model_detail']
+            st.cache_data.clear()
+            gc.collect()
             st.rerun()
         
     elif dataset_option == 'Current Dataset':
@@ -47,6 +52,7 @@ if 'raw_dataset' in st.session_state:
         df = st.session_state['current_dataset']['df_file'].copy()
         display_dataset(df)
         del df
+        gc.collect()
         if st.button('Reset Current Dataset', icon=':material/refresh:'): # Reset Button
             st.session_state['current_dataset'] = st.session_state['raw_dataset'].copy()
             st.session_state['outliers_removed'] = False
