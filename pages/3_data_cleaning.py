@@ -1,4 +1,5 @@
 import streamlit as st
+import gc
 from assets.styles.styler import apply_global_style
 from utils.data_visualization import display_dataset
 from utils.data_quality_check import find_missing_values, find_duplicate_values, find_outliers
@@ -43,11 +44,13 @@ else: # Main Code Start From Here
                     except Exception as e:
                         st.error(f':material/error: **Data type cannot be changed for feature** \'{column}\'. {e}')
                         success = False
+                gc.collect()
                 if success:
                     st.session_state['current_dataset']['df_file'] = df_processed
                     st.session_state['current_dataset']['report_status'] = False
                     st.session_state['current_dataset']['report_file'] = None
                     del df_processed, success
+                    gc.collect()
                     st.rerun()
         
         st.write('')
@@ -83,6 +86,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['report_status'] = False
                 st.session_state['current_dataset']['report_file'] = None
                 del df_processed
+                gc.collect()
                 st.rerun()
         else:
             st.success(':material/task_alt: No missing value found')
@@ -107,6 +111,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['report_status'] = False
                 st.session_state['current_dataset']['report_file'] = None
                 del df_processed
+                gc.collect()
                 st.rerun()
         else:
             st.success(':material/task_alt: No duplicate row found')
@@ -143,6 +148,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['report_file'] = None
                 st.session_state['outliers_removed'] = True
                 del df_original, df_numeric, Q1, Q3, IQR, df_numeric_processed, df_processed
+                gc.collect()
                 st.rerun()
         
         st.write('')
