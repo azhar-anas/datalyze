@@ -1,6 +1,8 @@
 import streamlit as st
+import gc
 from assets.styles.styler import apply_global_style
 from utils.data_visualization import display_dataset, generate_eda_report
+
 
 # Page Style
 apply_global_style()
@@ -37,3 +39,4 @@ else: # Main Code Start From Here
     st.subheader(':material/description: **Generated EDA Report**')
     generate_eda_report(selected_df, df_report)
     del selected_df, df_report, generate_eda_report
+    gc.collect()
