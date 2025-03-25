@@ -20,8 +20,10 @@ else: # Main Code Start From Here
     # 1. Change Data Type
     with tab1:
         st.write('This section allows you to **modify the data types** of selected features to match the appropriate format. You can convert data into **Boolean, Integer (int64), Float (float64), or Object** types. This ensures that your dataset is structured correctly for further analysis and modeling.')
+        st.info('We recommend that you first convert all feature data types to their correct types before proceeding with further data cleaning. To process non-binary categorical feature data types, you can go directly to the One-Hot Encoding section on the Feature Engineering page.')
         
-        features_to_change = st.multiselect('**Select features to change data type**', df.columns)
+        binary_categorical_features = [col for col in df.columns if df[col].nunique() == 2]
+        features_to_change = st.multiselect('**Select features to change data type**', df.columns, default=binary_categorical_features)
         new_dtype = st.selectbox('**Select new data type**', options=['boolean', 'int64', 'float64', 'object'])
         if st.button(label='Change Data Type', icon=':material/mop:'): # Change Data Type Button
             if not features_to_change:
