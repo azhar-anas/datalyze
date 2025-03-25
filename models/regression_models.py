@@ -1,5 +1,6 @@
 import streamlit as st
 import optuna as opt
+import gc
 from sklearn.model_selection import cross_val_score
 
 from sklearn.linear_model import LinearRegression
@@ -227,7 +228,7 @@ def get_r_param_range(model_name):
             ''')
         
         # Input Parameters             
-        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True, False])
+        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
         copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42, step=1)
         
@@ -253,14 +254,14 @@ def get_r_param_range(model_name):
             st.session_state.lr_max_iter_1 = max(st.session_state.lr_max_iter_0, st.session_state.lr_max_iter_1)
         
         # Input Parameters
-        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True, False])
+        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
         copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Minimum Value</div>', unsafe_allow_html=True)
                 alpha_0 = st.number_input('**Alpha (0.0001 - 10)**', min_value=0.0001, max_value=10.0, value=0.0001, step=0.0001, format='%.4f', key='lr_alpha_0', on_change=sync_values)
-                max_iter_0 = st.number_input('**Max Iteration (100 - 10000)**', min_value=100, max_value=10000, value=100, step=100, key='lr_max_iter_0')
+                max_iter_0 = st.number_input('**Max Iteration (100 - 10000)**', min_value=100, max_value=10000, value=5000, step=100, key='lr_max_iter_0')
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
                 alpha_1 = st.number_input('**Alpha (0.0001 - 10)**', min_value=0.0001, max_value=10.0, value=10.0, step=0.0001, format='%.4f', key='lr_alpha_1', on_change=sync_values)
@@ -291,14 +292,14 @@ def get_r_param_range(model_name):
             st.session_state.rr_max_iter_1 = max(st.session_state.rr_max_iter_0, st.session_state.rr_max_iter_1)
         
         # Input Parameters
-        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True, False])
+        fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
         copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Minimum Value</div>', unsafe_allow_html=True)
                 alpha_0 = st.number_input('**Alpha (0.0001 - 1.0)**', min_value=0.0001, max_value=1.0, value=0.0001, step=0.0001, format='%.4f', key='rr_alpha_0', on_change=sync_values)
-                max_iter_0 = st.number_input('**Max Iteration (100 - 10000)**', min_value=100, max_value=10000, value=100, step=100, key='rr_max_iter_0')
+                max_iter_0 = st.number_input('**Max Iteration (100 - 10000)**', min_value=100, max_value=10000, value=5000, step=100, key='rr_max_iter_0')
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
                 alpha_1 = st.number_input('**Alpha (0.0001 - 1.0)**', min_value=0.0001, max_value=1.0, value=1.0, step=0.0001, format='%.4f', key='rr_alpha_1', on_change=sync_values)
@@ -331,7 +332,7 @@ def get_r_param_range(model_name):
             st.session_state.dt_r_min_samples_leaf_1 = max(st.session_state.dt_r_min_samples_leaf_0, st.session_state.dt_r_min_samples_leaf_1)
         
         # Input Parameters             
-        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], default=['squared_error', 'friedman_mse', 'absolute_error', 'poisson'])
+        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], default=['friedman_mse', 'absolute_error'])
         max_features_range = st.multiselect('**Max Features** -> The number of features to consider when looking for the best split', [None, 'sqrt', 'log2'], default=[None, 'sqrt', 'log2'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
@@ -342,9 +343,9 @@ def get_r_param_range(model_name):
                 min_samples_leaf_0 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=1, key='dt_r_min_samples_leaf_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
-                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=50, key='dt_r_max_depth_1', on_change=sync_values)
-                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=20, key='dt_r_min_samples_split_1', on_change=sync_values)
-                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value = 20, key='dt_r_min_samples_leaf_1', on_change=sync_values)
+                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=10, key='dt_r_max_depth_1', on_change=sync_values)
+                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=10, key='dt_r_min_samples_split_1', on_change=sync_values)
+                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value = 10, key='dt_r_min_samples_leaf_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
         # Parameters Configuration Range
@@ -376,22 +377,22 @@ def get_r_param_range(model_name):
             st.session_state.rf_r_min_samples_leaf_1 = max(st.session_state.rf_r_min_samples_leaf_0, st.session_state.rf_r_min_samples_leaf_1)
         
         # Input Parameters    
-        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], default=['squared_error', 'friedman_mse', 'absolute_error', 'poisson'])
+        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], default=['friedman_mse', 'absolute_error'])
         max_features_range = st.multiselect('**Max Features** -> The number of features to consider when looking for the best split', [None, 'sqrt', 'log2'], default=[None, 'sqrt', 'log2'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Minimum Value</div>', unsafe_allow_html=True)
-                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=50, key='rf_r_n_estimators_0', on_change=sync_values)
+                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=10, key='rf_r_n_estimators_0', on_change=sync_values)
                 max_depth_0 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=3, key='rf_r_max_depth_0', on_change=sync_values)
                 min_samples_split_0 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=2, key='rf_r_min_samples_split_0', on_change=sync_values)
                 min_samples_leaf_0 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=1, key='rf_r_min_samples_leaf_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
-                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=250, key='rf_r_n_estimators_1', on_change=sync_values)
-                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=50, key='rf_r_max_depth_1', on_change=sync_values)
-                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=20, key='rf_r_min_samples_split_1', on_change=sync_values)
-                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=20, key='rf_r_min_samples_leaf_1', on_change=sync_values)
+                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=100, key='rf_r_n_estimators_1', on_change=sync_values)
+                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=10, key='rf_r_max_depth_1', on_change=sync_values)
+                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=10, key='rf_r_min_samples_split_1', on_change=sync_values)
+                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=10, key='rf_r_min_samples_leaf_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
         # Parameters Configuration Range
@@ -459,7 +460,7 @@ def get_r_param_range(model_name):
             st.session_state.svm_r_degree_1 = max(st.session_state.svm_r_degree_0, st.session_state.svm_r_degree_1)
             
         # Input Parameters
-        kernel_range = st.multiselect('**Kernel** -> Specifies the kernel type to be used in the algorithm', ['linear', 'poly', 'rbf', 'sigmoid'], default=['linear', 'poly', 'rbf', 'sigmoid'])
+        kernel_range = st.multiselect('**Kernel** -> Specifies the kernel type to be used in the algorithm', ['linear', 'poly', 'rbf', 'sigmoid'], default=['poly', 'rbf', 'sigmoid'])
         gamma_range = st.multiselect('**Gamma** -> Kernel coefficient for rbf, poly and sigmoid', ['scale', 'auto'], default=['scale', 'auto'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
@@ -469,7 +470,7 @@ def get_r_param_range(model_name):
                 degree_0 = st.number_input('**Degree (1 - 10)**', min_value=1, max_value=10, value=1, key='svm_r_degree_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
-                C_1 = st.number_input('**C (0.0001 - 10)**', min_value=0.0001, max_value=10.0, value=1e-2, step=0.0001, format="%.4f", key='svm_r_C_1', on_change=sync_values)
+                C_1 = st.number_input('**C (0.0001 - 10)**', min_value=0.0001, max_value=10.0, value=0.01, step=0.0001, format="%.4f", key='svm_r_C_1', on_change=sync_values)
                 degree_1 = st.number_input('**Degree (1 - 10)**', min_value=1, max_value=10, value=5, key='svm_r_degree_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
@@ -501,11 +502,11 @@ def get_r_param_range(model_name):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Minimum Value</div>', unsafe_allow_html=True)
-                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=50, key='ab_r_n_estimators_0', on_change=sync_values)
+                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=10, key='ab_r_n_estimators_0', on_change=sync_values)
                 learning_rate_0 = st.number_input('**Learning Rate (0.001 - 10.0)**', min_value=0.001, max_value=10.0, value=0.001, step=0.001, format="%.3f", key='ab_r_learning_rate_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
-                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=250, key='ab_r_n_estimators_1', on_change=sync_values)
+                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=100, key='ab_r_n_estimators_1', on_change=sync_values)
                 learning_rate_1 = st.number_input('**Learning Rate (0.001 - 10.0)**', min_value=0.001, max_value=10.0, value=1.0, step=0.001, format="%.3f", key='ab_r_learning_rate_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
@@ -537,25 +538,25 @@ def get_r_param_range(model_name):
             st.session_state.gb_r_min_samples_leaf_1 = max(st.session_state.gb_r_min_samples_leaf_0, st.session_state.gb_r_min_samples_leaf_1)
         
         # Input Parameters
-        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse'], default=['squared_error', 'friedman_mse'])
-        loss_range = st.multiselect('**Loss** -> The loss function to be optimized', ['squared_error', 'absolute_error', 'huber', 'quantile'], default=['squared_error', 'absolute_error', 'huber', 'quantile'])
+        criterion_range = st.multiselect('**Criterion** -> The function to measure the quality of a split', ['squared_error', 'friedman_mse'], default=['friedman_mse'])
+        loss_range = st.multiselect('**Loss** -> The loss function to be optimized', ['squared_error', 'absolute_error', 'huber', 'quantile'], default=['squared_error', 'absolute_error', 'huber'])
         max_features_range = st.multiselect('**Max Features** -> The number of features to consider when looking for the best split', [None, 'sqrt', 'log2'], default=[None, 'sqrt', 'log2'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Minimum Value</div>', unsafe_allow_html=True)
-                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=50, key='gb_r_n_estimators_0', on_change=sync_values)
+                n_estimators_0 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=10, key='gb_r_n_estimators_0', on_change=sync_values)
                 learning_rate_0 = st.number_input('**Learning Rate (0.001 - 10.0)**', min_value=0.001, max_value=10.0, value=0.001, step=0.001, format="%.3f", key='gb_r_learning_rate_0', on_change=sync_values)
                 max_depth_0 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=3, key='gb_r_max_depth_0', on_change=sync_values)
                 min_samples_split_0 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=2, key='gb_r_min_samples_split_0', on_change=sync_values)
                 min_samples_leaf_0 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=1, key='gb_r_min_samples_leaf_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
-                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=250, key='gb_r_n_estimators_1', on_change=sync_values)
+                n_estimators_1 = st.number_input('**N Estimators (10 - 1000)**', min_value=10, max_value=1000, value=100, key='gb_r_n_estimators_1', on_change=sync_values)
                 learning_rate_1 = st.number_input('**Learning Rate (0.001 - 10.0)**', min_value=0.001, max_value=10.0, value=1.0, step=0.001, format="%.3f", key='gb_r_learning_rate_1', on_change=sync_values)
-                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=50, key='gb_r_max_depth_1', on_change=sync_values)
-                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=20, key='gb_r_min_samples_split_1', on_change=sync_values)
-                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=20, key='gb_r_min_samples_leaf_1', on_change=sync_values)
+                max_depth_1 = st.number_input('**Max Depth (1 - 100)**', min_value=1, max_value=100, value=10, key='gb_r_max_depth_1', on_change=sync_values)
+                min_samples_split_1 = st.number_input('**Min Samples Split (2 - 50)**', min_value=2, max_value=50, value=10, key='gb_r_min_samples_split_1', on_change=sync_values)
+                min_samples_leaf_1 = st.number_input('**Min Samples Leaf (1 - 50)**', min_value=1, max_value=50, value=10, key='gb_r_min_samples_leaf_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
         # Parameters Configuration Range
@@ -592,8 +593,8 @@ def get_r_param_range(model_name):
             st.session_state.mlp_r_max_iter_1 = max(st.session_state.mlp_r_max_iter_0, st.session_state.mlp_r_max_iter_1)
         
         # Input Parameters
-        activation_range = st.multiselect('**Activation** -> Activation function for the hidden layer', ['identity', 'logistic', 'tanh', 'relu'], default=['identity', 'logistic', 'tanh', 'relu'])
-        solver_range = st.multiselect('**Solver** -> The solver for weight optimization', ['lbfgs', 'sgd', 'adam'], default=['lbfgs', 'sgd', 'adam'])
+        activation_range = st.multiselect('**Activation** -> Activation function for the hidden layer', ['identity', 'logistic', 'tanh', 'relu'], default=['relu'])
+        solver_range = st.multiselect('**Solver** -> The solver for weight optimization', ['lbfgs', 'sgd', 'adam'], default=['sgd', 'adam'])
         learning_rate = st.multiselect('**Learning Rate** -> The learning rate schedule for weight updates', ['constant', 'invscaling', 'adaptive'], default=['constant', 'adaptive'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
@@ -610,7 +611,7 @@ def get_r_param_range(model_name):
                 neurons_1 = st.number_input('**Neurons for each layer (1 - 1000)**', min_value=1, max_value=1000, value=100, key='mlp_r_neurons_1', on_change=sync_values)
                 learning_rate_init_1 = st.number_input('**Learning Rate Init (0.001 - 1.0)**', min_value=0.001, max_value=1.0, value=0.5, step=0.001, format="%.3f", key='mlp_r_learning_rate_init_1', on_change=sync_values)
                 alpha_1 = st.number_input('**Alpha (0.0001 - 0.1)**', min_value=0.0001, max_value=0.1, value=0.01, step=0.0001, format="%.4f", key='mlp_r_alpha_1', on_change=sync_values)
-                max_iter_1 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=500, key='mlp_r_max_iter_1', on_change=sync_values)
+                max_iter_1 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=100, key='mlp_r_max_iter_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
         # Parameters Configuration Range
@@ -792,4 +793,5 @@ def get_best_r_model(model_choice, params_range, x_train, y_train):
         best_model = MLPRegressor(**best_params, random_state=params_range['random_state'])
     
     del study, best_params
+    gc.collect()
     return best_model
