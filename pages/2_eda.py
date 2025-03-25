@@ -9,7 +9,7 @@ apply_global_style()
 
 # Page Header 
 st.title(':material/bar_chart_4_bars: Exploratory Data Analysis')
-st.write('**Exploratory Data Analysis (EDA)** in Datalyze runs automatically, providing a comprehensive report with just one click. Simply select a dataset, and Datalyze will generate **detailed summaries**, **visualizations**, and **statistical insights** to help you uncover patterns and relationships effortlessly.')
+st.write('**Exploratory Data Analysis (EDA)** in Datalyze runs automatically, providing a comprehensive report with just one click. Simply select a dataset, and Datalyze will generate **detailed summaries**, **visualizations**, and **statistical insights** to help you uncover patterns and relationships effortlessly. Additionally, you can also **download the EDA report** as an HTML file for further analysis.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
     st.warning(':material/warning: **No dataset found**. Please upload a dataset on the Upload Dataset page first.')
