@@ -171,7 +171,7 @@ else: # Main Code Start From Here
                 else:
                     param_range = get_r_param_range(model_choice)
                     cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
-                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['neg_mean_squared_error', 'neg_root_mean_squared_error', 'neg_mean_absolute_error', 'r2'])
+                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['neg_mean_absolute_error', 'neg_root_mean_squared_error', 'neg_mean_squared_error', 'r2'])
                     n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
                     param_range['cv'] = cv
                     param_range['scoring'] = scoring
