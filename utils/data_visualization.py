@@ -137,7 +137,7 @@ def display_regression_metrics(selected_y, y_pred):
 def plot_predicted_vs_actual(y_true, y_pred):
     fig, ax = plt.subplots()
     ax.scatter(y_pred, y_true)
-    ax.plot([y_pred.min(), y_pred.max()], [y_pred.min(), y_pred.max()], 'k--', lw=2)
+    ax.plot([y_pred.min(), y_pred.max()], [y_pred.min(), y_pred.max()], color='red', linestyle='--', lw=3)
     ax.set_xlabel('Predicted')
     ax.set_ylabel('Actual')
     ax.set_title('Predicted vs Actual')
@@ -147,7 +147,7 @@ def plot_predicted_vs_residuals(y_true, y_pred):
     residuals = y_true - y_pred
     fig, ax = plt.subplots()
     ax.scatter(y_pred, residuals)
-    ax.axhline(y=0, color='k', linestyle='--')
+    ax.axhline(y=0, color='red', linestyle='--', lw=3)
     ax.set_xlabel('Predicted')
     ax.set_ylabel('Residuals')
     ax.set_title('Predicted vs Residuals')
