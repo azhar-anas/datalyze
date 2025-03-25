@@ -137,7 +137,7 @@ else: # Main Code Start From Here
             if len(categorical_features) == 0:
                 st.warning(':material/warning: **No categorical features available for one-hot encoding**. Ensure there are features with unique values between 3 and 10.')
             else:
-                features_to_encode = st.multiselect('**Select categorical features to encode**', categorical_features)
+                features_to_encode = st.multiselect('**Select categorical features to encode**', categorical_features, default=list(categorical_features))
                 if st.button(label='One-Hot Encode', icon=':material/handyman:'):
                     if not features_to_encode:
                         st.error(':material/error: **No features selected**. Please select at least one feature to encode.')
