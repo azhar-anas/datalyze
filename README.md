@@ -45,6 +45,6 @@ Datalyze is built using the following technologies:
 ### 1️⃣ Installation
 Make sure you have Python 3.11 installed. Then, clone the repository and install dependencies:
 ```bash
-git clone https://github.com/yourusername/datalyze.git
+git clone https://github.com/azhar-anas/datalyze.git
 cd datalyze
 pip install -r requirements.txt
