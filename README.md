@@ -53,7 +53,7 @@ pip install -r requirements.txt
 ### 2️⃣ Running the App
 To start the Datalyze application, use the following command:
 ```bash
-streamlit run app.py
+streamlit run App.py
 ```
 
 ### 📜 License
