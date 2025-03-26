@@ -10,7 +10,7 @@ apply_global_style()
 # Page Header 
 st.title(':material/upload: Upload Dataset')
 st.write('Upload your dataset in **CSV** or **Excel** format to begin. Once uploaded, Datalyze automatically creates two dataset versions: the **Raw Dataset** and the **Current Dataset**. The **Raw Dataset** remains unchanged as a reference point, preserving the original data, while the **Current Dataset** serves as the working version for all analysis and transformations. You can download your dataset anytime. If needed, You can reset **Current Dataset** or delete **All Datasets** with a single click to start fresh.')
-st.info('Initially, both datasets are identical, but as you clean, preprocess, and modify data, only the **Current Dataset** is affected. This dual-dataset approach allows you to compare processed results against the original data, ensuring transparency and traceability.') 
+st.info('Initially, both datasets are identical, but as you clean, preprocess, and modify data, only the **Current Dataset** is affected. This dual-dataset approach allows you to compare processed results against the original data, ensuring transparency and traceability. Try it out with our **[sample dataset](https://drive.google.com/drive/folders/1YjTGIco0dqR8hDHGrOGza0eMZqMVpOAc?usp=sharing)**.') 
 
 # Upload Dataset
 col1, col2 = st.columns([7, 3])
