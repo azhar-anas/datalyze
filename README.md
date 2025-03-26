@@ -1,3 +1,5 @@
+![Datalyze Header](assets/images/logo_name_horizontal_817px.png)
+
 # Datalyze
 
 Datalyze is an all-in-one data analytics platform that transforms raw data into meaningful insights. Designed for analysts, data scientists, and business professionals, it simplifies data exploration, cleaning, preparation, and modeling with an intuitive interface, automation, and machine learning.
