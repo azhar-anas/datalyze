@@ -6,7 +6,7 @@ Datalyze stands out for its efficiency, accuracy, and accessibility. It works se
 
 ## 🚀 Features
 
-### 📂 Data Import & Management
+### 📂 :material/upload: Data Import & Management
 - Upload datasets in CSV or Excel format
 - Automatic data structure detection
 - Data preview with options to delete or restore data
