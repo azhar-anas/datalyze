@@ -6,7 +6,7 @@ Datalyze stands out for its efficiency, accuracy, and accessibility. It works se
 
 ## 🚀 Features
 
-### 📂 :material/upload: Data Import & Management
+### 📂 Data Import & Management
 - Upload datasets in CSV or Excel format
 - Automatic data structure detection
 - Data preview with options to delete or restore data
@@ -15,6 +15,7 @@ Datalyze stands out for its efficiency, accuracy, and accessibility. It works se
 - Automated data profiling and summary reports
 - Missing value analysis and duplicate detection
 - Descriptive statistics and interactive visualizations
+- Export EDA Report in `.html` format
 
 ### 🛠️ Data Cleaning & Feature Engineering
 - Modify feature types and handle missing values
