@@ -48,3 +48,13 @@ Make sure you have Python 3.11 installed. Then, clone the repository and install
 git clone https://github.com/azhar-anas/datalyze.git
 cd datalyze
 pip install -r requirements.txt
+```
+
+### 2️⃣ Running the App
+To start the Datalyze application, use the following command:
+```bash
+streamlit run app.py
+```
+
+📜 License
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
