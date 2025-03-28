@@ -24,6 +24,7 @@ with tab1:
     - **Hyperparameter Tuning**: Optimize model performance with **Tree-structured Parzen Estimator (TPE)** algorithm.
     - **Export & Share**: **Download reports, models, and visualizations** for further analysis or presentation.
     ''')
+    st.caption('Copyright © Azhar Anas 2025')
 
 # Tab 2: Key Features
 with tab2:
