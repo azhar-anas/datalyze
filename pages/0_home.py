@@ -24,6 +24,7 @@ with tab1:
     - **Hyperparameter Tuning**: Optimize model performance with **Tree-structured Parzen Estimator (TPE)** algorithm.
     - **Export & Share**: **Download reports, models, and visualizations** for further analysis or presentation.
     ''')
+    
     st.caption('Copyright © Azhar Anas 2025')
 
 # Tab 2: Key Features
@@ -94,3 +95,5 @@ with tab2:
         st.write('Explore your data, gain powerful insights, and make data-driven decisions with ease.')
         if st.button('Get Started', icon=':material/prompt_suggestion:', key='footer_button'):
             st.switch_page('pages/1_upload_dataset.py')
+            
+    st.caption('Copyright © Azhar Anas 2025')
