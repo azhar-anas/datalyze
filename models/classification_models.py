@@ -563,14 +563,14 @@ def get_c_param_range(model_name):
                 neurons_0 = st.number_input('**Neurons for each layer (1 - 1000)**', min_value=1, max_value=1000, value=10, key='mlp_c_neurons_0', on_change=sync_values)
                 learning_rate_init_0 = st.number_input('**Learning Rate Init (0.001 - 1.0)**', min_value=0.001, max_value=1.0, value=0.001, step=0.001, format="%.3f", key='mlp_c_learning_rate_init_0', on_change=sync_values)
                 alpha_0 = st.number_input('**Alpha (0.0001 - 0.1)**', min_value=0.0001, max_value=0.1, value=0.0001, step=0.0001, format="%.4f", key='mlp_c_alpha_0', on_change=sync_values)
-                max_iter_0 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=100, key='mlp_c_max_iter_0', on_change=sync_values)
+                max_iter_0 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=200, key='mlp_c_max_iter_0', on_change=sync_values)
             with col4:
                 st.markdown('<div style="text-align: center; font-weight: bold;"> Maximum Value</div>', unsafe_allow_html=True)
                 N_layers_1 = st.number_input('**N Layers (1 - 10)**', min_value=1, max_value=10, value=3, key='mlp_c_N_layers_1', on_change=sync_values)
                 neurons_1 = st.number_input('**Neurons for each layer (1 - 1000)**', min_value=1, max_value=1000, value=100, key='mlp_c_neurons_1', on_change=sync_values)
                 learning_rate_init_1 = st.number_input('**Learning Rate Init (0.001 - 1.0)**', min_value=0.001, max_value=1.0, value=0.5, step=0.001, format="%.3f", key='mlp_c_learning_rate_init_1', on_change=sync_values)
                 alpha_1 = st.number_input('**Alpha (0.0001 - 0.1)**', min_value=0.0001, max_value=0.1, value=0.01, step=0.0001, format="%.4f", key='mlp_c_alpha_1', on_change=sync_values)
-                max_iter_1 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=100, key='mlp_c_max_iter_1', on_change=sync_values)
+                max_iter_1 = st.number_input('**Max Iter (100 - 1000)**', min_value=100, max_value=1000, value=200, key='mlp_c_max_iter_1', on_change=sync_values)
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42)
         
         # Parameters Configuration Range
