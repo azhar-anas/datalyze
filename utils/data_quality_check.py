@@ -5,7 +5,7 @@ import seaborn as sns
 def find_missing_values(df):
     total_missing = df.isna().sum().sum()
     null_data = df[df.isna().any(axis=1)]
-    percent_missing = (total_missing / df.size) * 100
+    percent_missing = (total_missing / df.shape[0]) * 100
     return null_data, total_missing, percent_missing
 
 def find_duplicate_values(dataframe):
