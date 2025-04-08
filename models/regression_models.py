@@ -24,9 +24,8 @@ def lr_param_selector():
             ''')
     
     fit_intercept = st.selectbox('**Fit Intercept** -> Whether to calculate the intercept for this model', options=[True, False], index=0)
-    copy_X = st.selectbox('**Copy X** -> If True, X will be copied; else, it may be overwritten', options=[True, False], index=0)
     
-    params = {'fit_intercept': fit_intercept, 'copy_X': copy_X, 'n_jobs': -1}
+    params = {'fit_intercept': fit_intercept, 'n_jobs': -1}
     model = LinearRegression(**params)
     return model
 
@@ -39,12 +38,11 @@ def lasso_param_selector():
             ''')
     
     fit_intercept = st.selectbox('**Fit Intercept** -> Whether to calculate the intercept for this model', options=[True, False], index=0)
-    copy_X = st.selectbox('**Copy X** -> If True, X will be copied; else, it may be overwritten', options=[True, False], index=0)
     alpha = st.number_input('**Alpha (0.0001 - 10)** -> Constant that multiplies the L1 term', min_value=0.0001, max_value=10.0, value=1.0, step=0.0001, key='alpha', format="%.4f")
     max_iter = st.number_input('**Max Iteration (100 - 10000)** -> The maximum number of iterations', min_value=100, max_value=10000, value=1000, step=100, key='max_iter')
     random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42, step=1, key='random_state')
     
-    params = {'fit_intercept': fit_intercept, 'copy_X':copy_X, 'alpha': alpha, 'max_iter': max_iter, 'random_state': random_state}
+    params = {'fit_intercept': fit_intercept, 'alpha': alpha, 'max_iter': max_iter, 'random_state': random_state}
     model = Lasso(**params)
     return model
 
@@ -57,12 +55,11 @@ def ridge_param_selector():
             ''')
     
     fit_intercept = st.selectbox('**Fit Intercept** -> Whether to calculate the intercept for this model', options=[True, False], index=0)
-    copy_X = st.selectbox('**Copy X** -> If True, X will be copied; else, it may be overwritten', options=[True, False], index=0)
     alpha = st.number_input('**Alpha (0.0001 - 1.0)** -> L2 Regularization strength; must be a positive float',  min_value=0.0001, max_value=10.0, value=1.0, step=0.0001, format="%.4f")
     max_iter = st.number_input('**Max Iteration (100 - 10000)** -> The maximum number of iterations', min_value=100, max_value=10000, value=1000, step=100)
     random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42, step=1)
     
-    params = {'fit_intercept': fit_intercept, 'copy_X': copy_X, 'alpha': alpha, 'max_iter': max_iter, 'random_state': random_state}
+    params = {'fit_intercept': fit_intercept, 'alpha': alpha, 'max_iter': max_iter, 'random_state': random_state}
     model = Ridge(**params)
     return model
 
@@ -229,16 +226,14 @@ def get_r_param_range(model_name):
         
         # Input Parameters             
         fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
-        copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         random_state = st.number_input('**Random State (0 - 100)** -> Controls the randomness of the estimator', min_value=0, max_value=100, value=42, step=1)
         
         # Parameters Configuration Range
         params_range = {
             'fit_intercept': fit_intercept_range, 
-            'copy_X': copy_X_range,
             'random_state': random_state
         }
-        del fit_intercept_range, copy_X_range
+        del fit_intercept_range
     
     elif model_name == 'Lasso Regression':
         st.info('''
@@ -255,7 +250,6 @@ def get_r_param_range(model_name):
         
         # Input Parameters
         fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
-        copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
@@ -271,12 +265,11 @@ def get_r_param_range(model_name):
         # Parameters Configuration Range
         params_range = {
             'fit_intercept': fit_intercept_range,
-            'copy_X': copy_X_range,
             'alpha': [alpha_0, alpha_1],
             'max_iter': [max_iter_0, max_iter_1],
             'random_state': random_state
         }
-        del fit_intercept_range, copy_X_range, alpha_0, alpha_1, max_iter_0, max_iter_1
+        del fit_intercept_range, alpha_0, alpha_1, max_iter_0, max_iter_1
     
     elif model_name == 'Ridge Regression':
         st.info('''
@@ -293,7 +286,6 @@ def get_r_param_range(model_name):
         
         # Input Parameters
         fit_intercept_range = st.multiselect('**Fit Intercept** -> Whether to calculate the intercept for this model', [True, False], default=[True])
-        copy_X_range = st.multiselect('**Copy X** -> If True, X will be copied; else, it may be overwritten', [True, False], default=[True, False])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
             with col2:
@@ -309,12 +301,11 @@ def get_r_param_range(model_name):
         # Parameters Configuration Range
         params_range = {
             'fit_intercept': fit_intercept_range,
-            'copy_X': copy_X_range,
             'alpha': [alpha_0, alpha_1],
             'max_iter': [max_iter_0, max_iter_1],
             'random_state': random_state
         }
-        del fit_intercept_range, copy_X_range, alpha_0, alpha_1, max_iter_0, max_iter_1
+        del fit_intercept_range, alpha_0, alpha_1, max_iter_0, max_iter_1
     
     elif model_name == 'Decision Tree':
         st.info('''
@@ -645,8 +636,7 @@ def get_best_r_model(model_choice, params_range, x_train, y_train):
     if model_choice == 'Linear Regression':
         def objective(trial):
             fit_intercept = trial.suggest_categorical('fit_intercept', params_range['fit_intercept'])
-            copy_X = trial.suggest_categorical('copy_X', params_range['copy_X'])
-            model = LinearRegression(fit_intercept=fit_intercept, copy_X=copy_X, n_jobs=-1)
+            model = LinearRegression(fit_intercept=fit_intercept, n_jobs=-1)
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
@@ -657,10 +647,9 @@ def get_best_r_model(model_choice, params_range, x_train, y_train):
     elif model_choice == 'Lasso Regression':
         def objective(trial):
             fit_intercept = trial.suggest_categorical('fit_intercept', params_range['fit_intercept'])
-            copy_X = trial.suggest_categorical('copy_X', params_range['copy_X'])
             alpha = trial.suggest_float('alpha', params_range['alpha'][0], params_range['alpha'][1])
             max_iter = trial.suggest_int('max_iter', params_range['max_iter'][0], params_range['max_iter'][1])
-            model = Lasso(fit_intercept=fit_intercept, copy_X=copy_X, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
+            model = Lasso(fit_intercept=fit_intercept, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
@@ -671,10 +660,9 @@ def get_best_r_model(model_choice, params_range, x_train, y_train):
     elif model_choice == 'Ridge Regression':
         def objective(trial):
             fit_intercept = trial.suggest_categorical('fit_intercept', params_range['fit_intercept'])
-            copy_X = trial.suggest_categorical('copy_X', params_range['copy_X'])
             alpha = trial.suggest_float('alpha', params_range['alpha'][0], params_range['alpha'][1])
             max_iter = trial.suggest_int('max_iter', params_range['max_iter'][0], params_range['max_iter'][1])
-            model = Ridge(fit_intercept=fit_intercept, copy_X=copy_X, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
+            model = Ridge(fit_intercept=fit_intercept, alpha=alpha, max_iter=max_iter, random_state=params_range['random_state'])
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
