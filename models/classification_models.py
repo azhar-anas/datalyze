@@ -614,7 +614,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = LogisticRegression(**best_params, random_state=params_range['random_state'])
     
@@ -629,7 +629,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
 
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = DecisionTreeClassifier(**best_params, random_state=params_range['random_state'])
     
@@ -645,7 +645,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = RandomForestClassifier(**best_params, random_state=params_range['random_state'], n_jobs=-1)
         
@@ -659,7 +659,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = KNeighborsClassifier(**best_params, n_jobs=-1)
     
@@ -673,7 +673,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = SVC(**best_params)
     
@@ -684,7 +684,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = GaussianNB(**best_params)
     
@@ -696,7 +696,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = AdaBoostClassifier(**best_params, random_state=params_range['random_state'])
         
@@ -715,7 +715,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         model = GradientBoostingClassifier(**best_params, random_state=params_range['random_state'])
         
@@ -733,7 +733,7 @@ def get_best_c_model(model_choice, params_range, x_train, y_train):
             return cross_val_score(model, x_train, y_train, cv=params_range['cv'], scoring=params_range['scoring'], n_jobs=-1).mean()
         
         study = opt.create_study(direction='maximize', sampler=opt.samplers.TPESampler(seed=params_range['random_state']))
-        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=-1)
+        study.optimize(objective, n_trials=params_range['n_trials'], n_jobs=1)
         best_params = study.best_params
         n_layers = best_params.pop('n_layers')
         hidden_layer_sizes = tuple(best_params.pop(f'n_neurons_{i}') for i in range(n_layers))
