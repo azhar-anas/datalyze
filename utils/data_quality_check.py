@@ -3,8 +3,8 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 def find_missing_values(df):
-    null_data = df[df.isna().any(axis=1)]
     total_missing = df.isna().sum().sum()
+    null_data = df[df.isna().any(axis=1)]
     percent_missing = (total_missing / df.size) * 100
     return null_data, total_missing, percent_missing
 
