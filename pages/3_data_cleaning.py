@@ -12,7 +12,7 @@ st.title(':material/mop: Data Cleaning')
 st.write('Data cleaning is a crucial step in data preparation, ensuring that your dataset is accurate, consistent, and ready for analysis. Datalyze provides an intuitive interface to handle common data quality issues efficiently.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
-    st.warning(':material/warning: **No dataset found**. Please upload a dataset on the Upload Dataset page first.')
+    st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
 else: # Main Code Start From Here
     df = st.session_state['current_dataset']['df_file'].copy()
     tab1, tab2, tab3, tab4= st.tabs(['Change Data Type', 'Handle Missing Values', 'Remove Duplicate Rows', 'Remove Outliers'])
@@ -20,7 +20,7 @@ else: # Main Code Start From Here
     # 1. Change Data Type
     with tab1:
         st.write('This section allows you to **modify the data types** of selected features to match the appropriate format. You can convert data into **Boolean, Integer (int64), Float (float64), or Object** types. This ensures that your dataset is structured correctly for further analysis and modeling.')
-        st.info('We recommend that you first convert all feature data types to their correct types before proceeding with further data cleaning. To process non-binary categorical feature data types, you can go directly to the One-Hot Encoding section on the Feature Engineering page.')
+        st.info('We recommend that you first convert all feature data types to their correct types before proceeding with further data cleaning. To process non-binary categorical feature data types, you can go directly to the One-Hot Encoding section on the *Feature Engineering* page.')
         
         binary_categorical_features = [col for col in df.columns if df[col].nunique() == 2]
         features_to_change = st.multiselect('**Select features to change data type**', df.columns, default=binary_categorical_features)
