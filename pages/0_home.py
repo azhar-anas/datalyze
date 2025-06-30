@@ -8,7 +8,7 @@ apply_global_style()
 col1, col2, col3 = st.columns([1, 4, 1])
 with col2:
     st.image('assets/images/logo_name_horizontal_817px.png', use_container_width=True)
-      
+
 st.title('Welcome to Datalyze!')
 st.write('**Datalyze** is your all-in-one data analytics platform, designed to transform raw data into meaningful insights with ease. Whether you\'re an analyst, a data scientist, or a business professional, Datalyze empowers you to explore, clean, prepare, and model your data effortlessly. With an intuitive interface, automated processes, and machine learning capabilities, you can make data-driven decisions faster than ever before.')
     
@@ -25,7 +25,7 @@ with tab1:
     - **Export & Share**: **Download reports, models, and visualizations** for further analysis or presentation.
     ''')
     
-    # st.caption('Copyright © Azhar Anas 2025')
+    st.caption('Copyright © Datalyze 2025')
 
 # Tab 2: Key Features
 with tab2:
@@ -68,7 +68,7 @@ with tab2:
         st.info('''  
         - **Renaming Features**: Standardize column names for better readability.  
         - **Feature Addition**: Create new features using basic math and polynomial transformations. 
-        - **Feature Selection & Removal**: Remove irrelevant or redundant columns.  
+        - **Feature Removal**: Remove irrelevant or redundant columns.  
         - **One-Hot Encoding**: Convert multi-categorical data into numerical representations.  
         ''')
 
@@ -84,8 +84,8 @@ with tab2:
         - **Problem Type Selection**: Choose between **Regression** or **Binary Classification** tasks.  
         - **Manual & Automated Hyperparameter Tuning**: Optimize models with either manual settings or  
         **TPE-based tuning** for automated best-parameter selection.  
-        - **Performance Metrics Dashboard**: Evaluate model accuracy, precision, recall, and F1-score.  
-        - **Model Export**: Download trained models in `.joblib` format for deployment or further analysis.  
+        - **Performance Metrics Dashboard**: Evaluate model accuracy, precision, recall, F1-score, and other metrics.  
+        - **Model Export**: Download trained models in `.h5` format for deployment or further analysis.  
         ''')
     with col3:
         st.image('assets/images/logo_name_vertikal_500px.png', use_container_width=True)
@@ -96,4 +96,4 @@ with tab2:
         if st.button('Get Started', icon=':material/prompt_suggestion:', key='footer_button'):
             st.switch_page('pages/1_upload_dataset.py')
             
-    # st.caption('Copyright © Azhar Anas 2025')
+    st.caption('Copyright © Datalyze 2025')
