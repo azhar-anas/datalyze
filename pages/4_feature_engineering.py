@@ -12,7 +12,7 @@ st.title(':material/handyman: Feature Engineering')
 st.write('Feature Engineering is a key step in the data preparation process, where raw data is transformed into meaningful features that improve model performance. This page provides tools to allowing you to optimize your dataset for machine learning tasks.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
-    st.warning(':material/warning: **No dataset found**. Please upload a dataset on the Upload Dataset page first.')
+    st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
 else: # Main Code Start From Here
     df = st.session_state['current_dataset']['df_file'].copy()
     tab1, tab2, tab3, tab4 = st.tabs(['Rename Feature', 'Add Feature', 'Remove Feature', 'One-Hot Encoding'])
@@ -46,7 +46,7 @@ else: # Main Code Start From Here
         st.write('This Section enables you to **create new features using existing ones**. You can apply **Basic Mathematical Operations** (addition, subtraction, multiplication, or division) between two selected features or generate **Polynomial Features** by raising a selected feature to a specified degree (ranging from 2 to 10). These transformations help uncover new patterns and enhance model performance.')
         
         if st.session_state['current_dataset']['df_file'].isnull().sum().sum() > 0: # Ensure that the dataset does not contain missing values
-            st.warning(':material/warning: **Your \'Current Dataset\' contains missing values**. Please handle them on the **Data Cleaning** page first.')
+            st.warning(':material/warning: **Your *Current Dataset* Contains Missing Values**. Please handle them on the *Data Cleaning* page.')
         else:
             operation_type = st.selectbox('**Select operation type**', ['Basic Mathematical Operation', 'Polynomial'])
             new_feature_name = st.text_input('**Enter the name for the new feature**', placeholder='New feature name')
@@ -130,7 +130,7 @@ else: # Main Code Start From Here
         st.write('This section **converts categorical features with multiple unique values (ranging from 3 to 10) into binary features**. This transformation ensures that categorical data is properly formatted for machine learning models by creating separate columns for each unique category, making the dataset more suitable for numerical processing.')
         
         if st.session_state['current_dataset']['df_file'].isnull().sum().sum() > 0: # Ensure that the dataset does not contain missing values
-            st.warning(':material/warning: **Your \'Current Dataset\' contains missing values**. Please handle them on the **Data Cleaning** page first.')
+            st.warning(':material/warning: **Your *Current Dataset* Contains Missing Values**. Please handle them on the *Data Cleaning* page.')
         else:
             categorical_features = df.select_dtypes(include=['number', 'object']).loc[:, df.nunique() <= 10].loc[:, df.nunique() > 2]
             categorical_features = categorical_features.loc[:, ~categorical_features.apply(pd.api.types.is_bool_dtype)].columns
