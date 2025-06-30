@@ -1,6 +1,7 @@
 import streamlit as st
 import hashlib
 import re
+import gc
 from supabase import create_client, Client
 
 st.set_page_config(page_title='Datalyze', page_icon='assets/images/logo_only_500px_circle.png')
@@ -24,9 +25,13 @@ def show_auth():
     def load_users():
         try:
             res = supabase.table("app_users").select("*").execute()
-            return res.data if res.data else []
+            users = res.data if res.data else []
+            del res
+            gc.collect()
+            return users
         except Exception as e:
             st.error(f":material/error: Failed to load users. Error: {e}")
+            gc.collect()
             return []
 
     def verify_password(input_password, hashed_password):
@@ -48,11 +53,16 @@ def show_auth():
                 )
                 if user and verify_password(password, user["password"]):
                     st.session_state.logged_in = True
+                    del users, user
+                    gc.collect()
                     st.rerun()
                 else:
                     st.error(":material/error: Username atau password salah.")
+                del users
+                gc.collect()
             except Exception as e:
                 st.error(f":material/error: Login failed. Error: {e}")
+                gc.collect()
 
     with tab2:
         # Register tab
@@ -70,8 +80,10 @@ def show_auth():
         def save_user(new_user):
             try:
                 supabase.table("app_users").insert(new_user).execute()
+                gc.collect()
                 return True, None
             except Exception as e:
+                gc.collect()
                 return False, e
 
         if st.button("Register", use_container_width=True):
@@ -102,8 +114,11 @@ def show_auth():
                         st.success(":material/check_circle: Registration successful! Please login.")
                     else:
                         st.error(f":material/error: Registration failed. Error: {err}")
+                del users
+                gc.collect()
             except Exception as e:
                 st.error(f":material/error: Registration failed. Error: {e}")
+                gc.collect()
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -116,6 +131,7 @@ if not st.session_state.logged_in:
         st.image('assets/images/logo_name_horizontal_817px.png', use_container_width=True)
     
     show_auth()
+    gc.collect()
 
 else:
     # Sidebar logo
