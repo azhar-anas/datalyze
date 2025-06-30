@@ -1,6 +1,5 @@
 import streamlit as st
 import hashlib
-from pathlib import Path
 import re
 from supabase import create_client, Client
 
