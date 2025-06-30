@@ -26,7 +26,6 @@ def show_auth():
         try:
             res = supabase.table("app_users").select("*").execute()
             users = res.data if res.data else []
-            del res
             gc.collect()
             return users
         except Exception as e:
