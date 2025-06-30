@@ -17,9 +17,9 @@ st.title(':material/function: Machine Learning')
 st.write('Unlock the potential of machine learning to make data-driven decisions. This page allows you to configure datasets, select models, and evaluate performance, ensuring that your predictions are optimized for accuracy and efficiency. Choose between manual model configuration or automated hyperparameter tuning to achieve the best results.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
-    st.warning(':material/warning: **No dataset found**. Please upload a dataset on the Upload Dataset page first.')
+    st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
 elif st.session_state['current_dataset']['df_file'].isnull().sum().sum() > 0: # Ensure that the dataset does not contain missing values
-    st.warning(':material/warning: **Your \'Current Dataset\' contains missing values**. Please handle them on the **Data Cleaning** page first.')
+    st.warning(':material/warning: **Your *Current Dataset* Contains Missing Values**. Please handle them on the *Data Cleaning* page.')
 else: # Main Code Start From Here
     st.subheader(':material/manufacturing: Data Configuration')
     st.write('Configure your dataset for training by selecting the input features (**X**) and target variable (**Y**). Adjust the **train-test split ratio** and apply a **scaling method** (Min-Max Normalization, Z-Score Standardization, or Robust Scaling) to optimize model performance. Proper data configuration ensures your model is well-prepared for training.')
@@ -289,9 +289,9 @@ else: # Main Code Start From Here
         joblib.dump(model, buffer)
         buffer.seek(0)
         if ml_problem == 'Classification (2 Classes)':
-            model_filename = 'sklearn_classifier_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.joblib'
+            model_filename = 'sklearn_classifier_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.h5'
         else:
-            model_filename = 'sklearn_regressor_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.joblib'
+            model_filename = 'sklearn_regressor_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.h5'
         st.download_button(
             label='Download Model',
             icon=':material/download:',
