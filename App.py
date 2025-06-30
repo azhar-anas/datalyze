@@ -4,7 +4,7 @@ import re
 import gc
 from supabase import create_client, Client
 
-st.set_page_config(page_title='Datalyze', page_icon='assets/images/logo_only_500px_circle.png')
+    st.set_page_config(page_title='Datalyze', page_icon='assets/images/logo_only_500px_circle.png')
 
 # # Login & Register section with Supabase
 # SUPABASE_URL = "https://ramtjckjvdhbamxedovs.supabase.co"
