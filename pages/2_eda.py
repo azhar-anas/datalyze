@@ -3,7 +3,6 @@ import gc
 from assets.styles.styler import apply_global_style
 from utils.data_visualization import display_dataset, generate_eda_report
 
-
 # Page Style
 apply_global_style()
 
@@ -12,10 +11,10 @@ st.title(':material/bar_chart_4_bars: Exploratory Data Analysis')
 st.write('**Exploratory Data Analysis (EDA)** in Datalyze runs automatically, providing a comprehensive report with just one click. Simply select a dataset, and Datalyze will generate **detailed summaries**, **visualizations**, and **statistical insights** to help you uncover patterns and relationships effortlessly. Additionally, you can also **download the EDA report** as an HTML file for further analysis.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
-    st.warning(':material/warning: **No dataset found**. Please upload a dataset on the Upload Dataset page first.')
+    st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
 else: # Main Code Start From Here
     
-    # Select and view dataset
+    # Select dataset to generate EDA report
     dataset_choice = st.selectbox('**Select Dataset**', ['Current Dataset', 'Raw Dataset'])
     if dataset_choice == 'Current Dataset':
         selected_df = st.session_state['current_dataset']['df_file'].copy()
@@ -31,12 +30,12 @@ else: # Main Code Start From Here
             'report_status': st.session_state['raw_dataset']['report_status'],
             'report_file': st.session_state['raw_dataset']['report_file']
         }
-        
+    
+    # Display selected dataset
     display_dataset(selected_df)
     
     # Generate EDA Report
     st.write('')
     st.subheader(':material/description: **Generated EDA Report**')
-    generate_eda_report(selected_df, df_report)
-    del selected_df, df_report, generate_eda_report
+    generate_eda_report(selected_df, df_report)    
     gc.collect()
