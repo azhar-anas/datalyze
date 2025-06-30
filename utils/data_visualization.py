@@ -27,14 +27,18 @@ def display_dataset(df, border=True):
             st.write('Dataset Shape: ', df.shape)
     del df, data_info
     gc.collect()
-    
+
+
+
 def generate_eda_report(df, df_report):
     df_type = df_report['df_type']
     if df_report['report_status'] == False:
         st.session_state[df_type]['report_file'] = ProfileReport(df, title='Pandas Profiling Report', explorative=True)
         st.session_state[df_type]['report_status'] = True
+        gc.collect()
     
     st_profile_report(report=st.session_state[df_type]['report_file'])
+    gc.collect()
     
     export_html = st.session_state[df_type]['report_file'].to_html()
     st.download_button(
@@ -45,9 +49,12 @@ def generate_eda_report(df, df_report):
         key='eda_report', 
         use_container_width=True
     )
+
     del df, df_report
     gc.collect()
-    
+
+
+
 def plot_confusion_matrix(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
     fig, ax = plt.subplots()
@@ -56,6 +63,8 @@ def plot_confusion_matrix(y_true, y_pred):
     ax.set_ylabel('Actual')
     ax.set_title('Confusion Matrix')
     return st.pyplot(fig)
+
+
 
 def plot_classification_metrics(selected_y, y_pred):
     accuracy = accuracy_score(selected_y, y_pred)
@@ -79,6 +88,8 @@ def plot_classification_metrics(selected_y, y_pred):
     ax.set_title('Classification Metrics')
     return st.pyplot(fig)
 
+
+
 def plot_roc_curve(model, selected_x, selected_y):
     if hasattr(model, "predict_proba"):
         y_pred_proba = model.predict_proba(selected_x)[:, 1]
@@ -96,6 +107,8 @@ def plot_roc_curve(model, selected_x, selected_y):
     ax.set_title('Receiver Operating Characteristic (ROC) Curve')
     ax.legend(loc="lower right")
     return st.pyplot(fig)
+
+
 
 def plot_precision_recall_curve(model, selected_x, selected_y):
     if hasattr(model, "predict_proba"):
@@ -115,6 +128,8 @@ def plot_precision_recall_curve(model, selected_x, selected_y):
     ax.legend(loc="lower left")
     return st.pyplot(fig)
 
+
+
 def display_regression_metrics(selected_y, y_pred):
     mse = mean_squared_error(selected_y, y_pred)
     rmse = root_mean_squared_error(selected_y, y_pred)
@@ -133,7 +148,9 @@ def display_regression_metrics(selected_y, y_pred):
         st.metric("MAPE", f"{mape:.2f}%")
     with col5:
         st.metric("R2", f"{r2:.3f}")
-        
+
+
+
 def plot_predicted_vs_actual(y_true, y_pred):
     fig, ax = plt.subplots()
     ax.scatter(y_pred, y_true)
@@ -142,6 +159,8 @@ def plot_predicted_vs_actual(y_true, y_pred):
     ax.set_ylabel('Actual')
     ax.set_title('Predicted vs Actual')
     return st.pyplot(fig)
+
+
 
 def plot_predicted_vs_residuals(y_true, y_pred):
     residuals = y_true - y_pred
@@ -152,6 +171,8 @@ def plot_predicted_vs_residuals(y_true, y_pred):
     ax.set_ylabel('Residuals')
     ax.set_title('Predicted vs Residuals')
     return st.pyplot(fig)
+
+
 
 def plot_kde(selected_y, y_pred):
     fig, ax = plt.subplots(figsize=(13, 6))
