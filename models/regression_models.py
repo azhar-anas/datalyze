@@ -585,7 +585,7 @@ def get_r_param_range(model_name):
         
         # Input Parameters
         activation_range = st.multiselect('**Activation** -> Activation function for the hidden layer', ['identity', 'logistic', 'tanh', 'relu'], default=['relu'])
-        solver_range = st.multiselect('**Solver** -> The solver for weight optimization', ['lbfgs', 'sgd', 'adam'], default=['sgd', 'adam'])
+        solver_range = st.multiselect('**Solver** -> The solver for weight optimization', ['lbfgs', 'sgd', 'adam'], default=['adam'])
         learning_rate = st.multiselect('**Learning Rate** -> The learning rate schedule for weight updates', ['constant', 'invscaling', 'adaptive'], default=['constant', 'adaptive'])
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([1, 15, 1, 15, 1])
