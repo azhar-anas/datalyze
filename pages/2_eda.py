@@ -34,6 +34,14 @@ else: # Main Code Start From Here
     
     # Display selected dataset
     display_dataset(selected_df)
+
+# OLD CODE --------------------------------------------------------------------------------------------------------------------------
+    # Generate EDA Report
+    # st.write('')
+    # st.subheader(':material/description: **Generated EDA Report**')
+    # generate_eda_report(selected_df, df_report)
+    # gc.collect()
+# OLD CODE --------------------------------------------------------------------------------------------------------------------------
     
     # Display EDA Actions
     st.write('')
@@ -63,7 +71,7 @@ else: # Main Code Start From Here
             col1, col2 = st.columns([3, 10])
             with col1:
                 x_col = st.selectbox('**Select X-axis Column**', numeric_cols)
-                y_col = st.selectbox('**Select Y-axis Column**', numeric_cols)
+                y_col = st.selectbox('**Select Y-axis Column**', numeric_cols, index=1)
                 color_candidates = [
                     col for col in selected_df.columns
                     if selected_df[col].nunique() < 10
