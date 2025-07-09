@@ -74,9 +74,8 @@ def show_interactive_scatter_plot(selected_df):
             color_candidates = [col for col in selected_df.columns if selected_df[col].nunique() < 10]
             color_col = st.selectbox('**Select Color Column (Optional)**', ['None'] + color_candidates)
         with col2:
-            # if x_col and y_col:
-            if x_col == y_col:
-                st.warning(':material/warning: **X-axis and Y-axis columns must be different.** Please select two different columns.')
+            if x_col == y_col or x_col == color_col or y_col == color_col:
+                st.warning(':material/warning: **Invalid Selection**. X-axis, Y-axis, and Color columns must be different.')
             else:
                 st.markdown(
                 f"<div style='text-align: center;'><b>Scatter Plot of {x_col} vs {y_col}</b></div>",
