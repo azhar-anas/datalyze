@@ -2,7 +2,7 @@ streamlit==1.44.1
 pandas==2.2.3
 matplotlib==3.9.4
 seaborn==0.13.2
-scikit-learn==1.6.1
+scikit-learn==1.7.0
 optuna==4.2.1
 joblib==1.4.2
 ydata-profiling==4.12.2
