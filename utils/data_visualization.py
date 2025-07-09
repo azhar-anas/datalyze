@@ -61,6 +61,37 @@ def generate_eda_report(df, df_report):
 
 
 
+
+def show_interactive_scatter_plot(selected_df):
+    numeric_cols = selected_df.select_dtypes(include='number').columns
+    if len(numeric_cols) < 2:
+        st.warning(':material/warning: **Not Enough Numeric Columns**. Please select a dataset with at least two numeric columns for scatter plot visualization.')
+    else:
+        col1, col2 = st.columns([3, 10])
+        with col1:
+            x_col = st.selectbox('**Select X-axis Column**', numeric_cols)
+            y_col = st.selectbox('**Select Y-axis Column**', numeric_cols, index=1)
+            color_candidates = [col for col in selected_df.columns if selected_df[col].nunique() < 10]
+            color_col = st.selectbox('**Select Color Column (Optional)**', ['None'] + color_candidates)
+        with col2:
+            # if x_col and y_col:
+            if x_col == y_col:
+                st.warning(':material/warning: **X-axis and Y-axis columns must be different.** Please select two different columns.')
+            else:
+                st.markdown(
+                f"<div style='text-align: center;'><b>Scatter Plot of {x_col} vs {y_col}</b></div>",
+                unsafe_allow_html=True
+                )
+                if color_col != 'None':
+                    st.scatter_chart(data=selected_df[[x_col, y_col, color_col]], x=x_col, y=y_col, color=color_col, size=70, height=400)
+                    gc.collect()
+                else:
+                    st.scatter_chart(data=selected_df[[x_col, y_col]], x=x_col, y=y_col, size=70, height=400)
+                    gc.collect()
+
+
+
+
 def plot_confusion_matrix(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
     fig, ax = plt.subplots()
