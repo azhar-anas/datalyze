@@ -30,6 +30,19 @@ def display_dataset(df, border=True):
 
 
 
+def download_eda_report_button(report, df_type):
+    export_html = report.to_html()
+    st.download_button(
+        label='Download EDA Report', 
+        icon=':material/download:', 
+        data=export_html, 
+        file_name=f'eda_report_{df_type}.html', 
+        key=f'eda_report_{df_type}', 
+        use_container_width=True
+    )
+
+
+
 def generate_eda_report(df, df_report):
     df_type = df_report['df_type']
     if df_report['report_status'] == False:
@@ -37,18 +50,11 @@ def generate_eda_report(df, df_report):
         st.session_state[df_type]['report_status'] = True
         gc.collect()
     
-    st_profile_report(report=st.session_state[df_type]['report_file'])
+    report = st.session_state[df_type]['report_file']
+    st_profile_report(report=report)
     gc.collect()
     
-    export_html = st.session_state[df_type]['report_file'].to_html()
-    st.download_button(
-        label='Download EDA Report', 
-        icon=':material/download:', 
-        data=export_html, 
-        file_name=f'eda_report_{df_type}.html', 
-        key='eda_report', 
-        use_container_width=True
-    )
+    download_eda_report_button(report, df_type)
 
     del df, df_report
     gc.collect()
