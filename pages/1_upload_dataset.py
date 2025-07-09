@@ -75,11 +75,10 @@ if 'raw_dataset' in st.session_state:
         
         # Delete All Datasets Button
         if st.button('Delete All Datasets', icon=':material/delete:'):
-            del st.session_state['raw_dataset']
-            del st.session_state['current_dataset']
-            del st.session_state['outliers_removed']
-            del st.session_state['dataset_split']
-            del st.session_state['model_detail']
+            keys_to_keep = ['logged_in']
+            keys_to_delete = [k for k in st.session_state.keys() if k not in keys_to_keep]
+            for k in keys_to_delete:
+                del st.session_state[k]
             st.cache_data.clear()
             gc.collect()
             st.rerun()
