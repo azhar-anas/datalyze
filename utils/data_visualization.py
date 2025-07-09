@@ -82,10 +82,10 @@ def show_interactive_scatter_plot(selected_df):
                 unsafe_allow_html=True
                 )
                 if color_col != 'None':
-                    st.scatter_chart(data=selected_df[[x_col, y_col, color_col]], x=x_col, y=y_col, color=color_col, size=70, height=400)
+                    st.scatter_chart(data=selected_df[[x_col, y_col, color_col]], x=x_col, y=y_col, color=color_col, size=70, height=450)
                     gc.collect()
                 else:
-                    st.scatter_chart(data=selected_df[[x_col, y_col]], x=x_col, y=y_col, size=70, height=400)
+                    st.scatter_chart(data=selected_df[[x_col, y_col]], x=x_col, y=y_col, size=70, height=450)
                     gc.collect()
 
 
