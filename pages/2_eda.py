@@ -46,22 +46,9 @@ else: # Main Code Start From Here
             if st.button(':material/description: Generate EDA Report', use_container_width=True):
                 generate_eda_report(selected_df, df_report)
                 gc.collect()
-                # Update the session state after generating the report
-                if dataset_choice == 'Current Dataset':
-                    st.session_state['current_dataset']['report_status'] = True
-                else:
-                    st.session_state['raw_dataset']['report_status'] = True
                 st.rerun()
         elif df_report['report_status']:
-            # Display the existing report
-            if dataset_choice == 'Current Dataset':
-                report_file = st.session_state['current_dataset']['report_file']
-            else:
-                report_file = st.session_state['raw_dataset']['report_file']
-            
-            if report_file:
-                st_profile_report(report=report_file)
-                download_eda_report_button(report_file, df_report['df_type'])
+                generate_eda_report(selected_df, df_report)
                 gc.collect()
         else:
             st.error(':material/error: **Error in Generating EDA Report!** Please try again.')
