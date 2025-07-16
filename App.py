@@ -43,7 +43,7 @@ def show_auth():
 
         username_or_email = st.text_input("Username/Email", placeholder="Enter your username or email", key="login_username")
         password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
-        if st.button("Login", type='primary', use_container_width=True):
+        if st.button("Login", use_container_width=True):
             try:
                 users = load_users()
                 user = next(
@@ -85,7 +85,7 @@ def show_auth():
                 gc.collect()
                 return False, e
 
-        if st.button("Register", type='primary', use_container_width=True):
+        if st.button("Register", use_container_width=True):
             try:
                 users = load_users()
                 if not reg_name or not reg_username or not reg_email or not reg_password or not reg_password_confirm:
