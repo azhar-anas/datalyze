@@ -9,7 +9,7 @@ apply_global_style()
 
 # Page Header 
 st.title(':material/mop: Data Cleaning')
-# st.write('Data cleaning is a crucial step in data preparation, ensuring that your dataset is accurate, consistent, and ready for analysis. Datalyze provides an intuitive interface to handle common data quality issues efficiently.')
+st.write('Data cleaning is a crucial step in data preparation, ensuring that your dataset is accurate, consistent, and ready for analysis. Datalyze provides an intuitive interface to handle common data quality issues efficiently.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
     st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
