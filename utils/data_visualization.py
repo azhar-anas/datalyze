@@ -38,7 +38,8 @@ def download_eda_report_button(report, df_type):
         data=export_html, 
         file_name=f'eda_report_{df_type}.html', 
         key=f'eda_report_{df_type}', 
-        use_container_width=True
+        use_container_width=True,
+        help='Download EDA Report as HTML file'
     )
 
 
