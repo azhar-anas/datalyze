@@ -9,7 +9,7 @@ apply_global_style()
 
 # Page Header 
 st.title(':material/mop: Data Cleaning')
-st.write('Data cleaning is a crucial step in data preparation, ensuring that your dataset is accurate, consistent, and ready for analysis. Datalyze provides an intuitive interface to handle common data quality issues efficiently.')
+# st.write('Data cleaning is a crucial step in data preparation, ensuring that your dataset is accurate, consistent, and ready for analysis. Datalyze provides an intuitive interface to handle common data quality issues efficiently.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
     st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
@@ -19,8 +19,8 @@ else: # Main Code Start From Here
     
     # 1. Change Data Type
     with tab1:
-        st.write('This section allows you to **modify the data types** of selected features to match the appropriate format. You can convert data into **Boolean, Integer (int64), Float (float64), or Object** types. This ensures that your dataset is structured correctly for further analysis and modeling.')
-        st.info('We recommend that you first convert all feature data types to their correct types before proceeding with further data cleaning. To process non-binary categorical feature data types, you can go directly to the One-Hot Encoding section on the *Feature Engineering* page.')
+        st.write('This section allows you to **modify the data types** of selected features to match the appropriate format. You can convert data into **Boolean, Integer (int64), Float (float64), or String (object)** types. This ensures that your dataset is structured correctly for further analysis and modeling.')
+        st.info('We recommend that you first convert all feature data types to their correct types before proceeding with further data cleaning. To process non-binary categorical feature data types, you can go directly to the *Feature Encoding* section on the *Feature Engineering* page.')
         
         binary_categorical_features = [col for col in df.columns if df[col].nunique() == 2]
         features_to_change = st.multiselect('**Select features to change data type**', df.columns, default=binary_categorical_features)
@@ -61,7 +61,7 @@ else: # Main Code Start From Here
     
     # 2. Handle Missing Values
     with tab2:
-        st.write('This section helps you **detect & manage incomplete data** by providing three methods: **Delete** -> Remove rows containing missing values; **Fill with Mean Value** -> Replace missing values with the mean (for integer & float types); And **Fill with Most Frequent Value** -> Replace missing values with the most frequently occurring value, applicable to **integer & float, Boolean only, or all data types**.')
+        st.write('This section helps you **detect & manage incomplete data** by providing three methods: **Delete** -> Remove rows containing missing values; **Fill with Mean Value** -> Replace missing values with the mean (for integer & float types only); and **Fill with Most Frequent Value** -> Replace missing values with the most frequently occurring value, applicable to **integer & float, Boolean only, or all data types**.')
         
         null_data, total_missing, percent_missing = find_missing_values(df)
         st.write(f'**Number of missing value: {total_missing}/{df.shape[0]} ({percent_missing:.2f}%)**')
@@ -133,7 +133,7 @@ else: # Main Code Start From Here
             st.write('')
         st.dataframe(outliers, use_container_width=True)
         
-        if st.session_state['outliers_removed'] is True or outliers.empty:
+        if st.session_state['current_dataset']['outliers_removed'] is True or outliers.empty:
             st.success(':material/task_alt: No outlier found')
         else:
             if st.button(label='Delete Outliers', icon=':material/mop:'):
@@ -148,7 +148,7 @@ else: # Main Code Start From Here
                 st.session_state['current_dataset']['df_file'] = df_processed
                 st.session_state['current_dataset']['report_status'] = False
                 st.session_state['current_dataset']['report_file'] = None
-                st.session_state['outliers_removed'] = True
+                st.session_state['current_dataset']['outliers_removed'] = True
                 del df_original, df_numeric, Q1, Q3, IQR, df_numeric_processed, df_processed
                 gc.collect()
                 st.rerun()
