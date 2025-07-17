@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from models.classification_models import logr_param_selector, dt_c_param_selector, rf_c_param_selector, knn_c_param_selector, svc_param_selector, nb_c_param_selector, ada_c_param_selector, gb_c_param_selector, mlp_c_param_selector, get_c_param_range, get_best_c_model
 from models.regression_models import lr_param_selector, lasso_param_selector, ridge_param_selector, dt_r_param_selector, rf_r_param_selector, knn_r_param_selector, svr_param_selector, ada_r_param_selector, gb_r_param_selector, mlp_r_param_selector, get_r_param_range, get_best_r_model
 from utils.data_visualization import display_dataset, plot_confusion_matrix, plot_classification_metrics, plot_roc_curve, plot_precision_recall_curve, display_regression_metrics, plot_predicted_vs_actual, plot_predicted_vs_residuals, plot_kde
+from utils.model_scaler_download import download_model_and_scaler
 
 # Page Style
 apply_global_style()
@@ -24,177 +25,176 @@ else: # Main Code Start From Here
     st.subheader(':material/manufacturing: Data Configuration')
     st.write('Configure your dataset for training by selecting the input features (**X**) and target variable (**Y**). Adjust the **train-test split ratio** and apply a **scaling method** (Min-Max Normalization, Z-Score Standardization, or Robust Scaling) to optimize model performance. Proper data configuration ensures your model is well-prepared for training.')
     
-    # Data Configuration
-    # A. Select Dataset
-    dataset_choice = st.selectbox('**Select Dataset**', ['Current Dataset', 'Raw Dataset'])
-    if dataset_choice == 'Current Dataset':
-        selected_df = st.session_state['current_dataset']['df_file'].copy()
-    else:
-        selected_df = st.session_state['raw_dataset']['df_file'].copy()
-    
-    # Check for missing values on Raw Dataset
-    if selected_df.isnull().sum().sum() > 0:
-        st.error(':material/error: **Your \'Raw Dataset\' contains missing values**. You can\'t proceed with machine learning analysis with this dataset.')
-    else:   
-        with st.container(border=True, key='data_config_container'):
-            display_dataset(selected_df, border=False)
-            st.write('')
-            # 1. Select Features
-            features = st.multiselect('**Select independent features (X variables)**', selected_df.columns, selected_df.columns)
-            target = st.selectbox('**Select dependent feature (Y variable)**', selected_df.columns)
-            # 2. Data Splitting
-            train_size = st.slider('**Train Size**', min_value=0.1, max_value=0.9, step=0.05, value=0.8)
-            test_size = st.slider('**Test Size**', min_value=0.1, max_value=0.9, value=1-train_size, disabled=True)
-            random_state = st.number_input('**Random State (0 - 100)** -> Control Splitting Reproducibility', min_value=0, max_value=100, step=1, value=42)
-            # 3. Feature Scaling
-            normalization_method = st.radio('**Select feature scaling method** (Applied only numeric data type)', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
-            
-            # Apply Changes Button
-            if st.button(label='Apply Changes', icon=':material/manufacturing:', use_container_width=True):
-                processed_df = selected_df.copy()
-                X = processed_df[features]
-                y = processed_df[target]
-                if features == []:
-                    st.error(':material/error: **Please select at least one independent feature**.')
-                elif X.select_dtypes(include=['object', 'datetime']).shape[1] > 0 or y.dtype in ['object', 'datetime']:
-                    st.error(':material/error: **Selected features contain non-numeric data types**. Please select only numeric or boolean features.')
-                else:
-                    x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=train_size, random_state=random_state)
-                    numeric_cols = x_train.select_dtypes(include=['number']).columns
-                    scaled_status = False
-                    if normalization_method == 'Min-Max Normalization':
-                        scaler = MinMaxScaler()
-                        scaled_status = True
-                    elif normalization_method == 'Z-Score Standardization':
-                        scaler = StandardScaler()
-                        scaled_status = True
-                    elif normalization_method == 'Robust Scaling':
-                        scaler = RobustScaler()
-                        scaled_status = True
-                    else:
-                        scaler = None
-
-                    if scaler:
-                        x_train[numeric_cols] = scaler.fit_transform(x_train[numeric_cols])
-                        x_test[numeric_cols] = scaler.transform(x_test[numeric_cols])
-
-                    st.session_state['dataset_split'] = {'x_train': x_train, 'x_test': x_test, 'y_train': y_train, 'y_test': y_test, 'train_size': train_size, 'is_scaled': scaled_status, 'norm_method': normalization_method}
-                    st.success(':material/task_alt: Data has been split successfully!')
-                    st.write(f'Training Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_train.shape, y_train.shape)
-                    st.write(f'Test Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_test.shape, y_test.shape)
-                    del processed_df, x_train, x_test, y_train, y_test, X, y, numeric_cols, scaler, scaled_status
-                    gc.collect()
+    # A. Data Configuration
+    selected_df = st.session_state['current_dataset']['df_file'].copy()
+    with st.container(border=True, key='data_config_container'):
+        display_dataset(selected_df, border=False)
+        st.write('')
+        # 1. Select Features
+        features = st.multiselect('**Select independent features (X variables)**', selected_df.columns, selected_df.columns)
+        target = st.selectbox('**Select dependent feature (Y variable)**', selected_df.columns)
+        # 2. Data Splitting
+        train_size = st.slider('**Train Size**', min_value=0.1, max_value=0.9, step=0.05, value=0.8)
+        test_size = st.slider('**Test Size**', min_value=0.1, max_value=0.9, value=1-train_size, disabled=True)
+        random_state = st.number_input('**Random State (0 - 100)** -> Control Splitting Reproducibility', min_value=0, max_value=100, step=1, value=42)
+        # 3. Feature Scaling
+        normalization_method = st.radio('**Select feature scaling method** (Applied only numeric data type)', ['None', 'Min-Max Normalization', 'Z-Score Standardization', 'Robust Scaling'])
         
-        # B. Model Selection
-        st.write(''); st.write('')
-        st.subheader(':material/autorenew: Model Selection')
-        st.write('Choose the most suitable machine learning model for your problem. Select between **manual configuration**, where you specify the model and its hyperparameters, or **automated hyperparameter tuning**, which optimizes the parameters using advanced search techniques. The hyperparameter tuning process allows you to define categorical and numerical hyperparameters, set search boundaries, specify cross-validation folds, choose an evaluation metric, and define the number of iterations for **Tree-structured Parzen Estimator (TPE)** optimization.')
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            ml_problem = st.selectbox('**Machine Learning Problem**', ['Classification (2 Classes)', 'Regression'])
-        with col2:
-            if ml_problem == 'Classification (2 Classes)':
-                model_choice = st.selectbox('**Select Model**', ['Logistic Regression', 'Decision Tree', 'Random Forest', 'K-Nearest Neighbors', 'Support Vector Machine', 'Naive Bayes', 'AdaBoost', 'Gradient Boosting', 'Multi-Layer Perceptron (Neural Network)'])
+        # Apply Changes Button
+        if st.button(label='Apply Changes', icon=':material/manufacturing:', use_container_width=True):
+            processed_df = selected_df.copy()
+            X = processed_df[features]
+            y = processed_df[target]
+            if features == []:
+                st.error(':material/error: **Please select at least one independent feature**.')
+            elif X.select_dtypes(include=['object', 'datetime']).shape[1] > 0 or y.dtype in ['object', 'datetime']:
+                st.error(':material/error: **Selected features contain non-numeric data types**. Please select only numeric or boolean features.')
             else:
-                model_choice = st.selectbox('**Select Model**', ['Linear Regression', 'Lasso Regression', 'Ridge Regression', 'Decision Tree', 'Random Forest', 'K-Nearest Neighbors', 'Support Vector Machine', 'AdaBoost', 'Gradient Boosting', 'Multi-Layer Perceptron (Neural Network)'])
+                x_train, x_test, y_train, y_test = train_test_split(X, y, train_size=train_size, random_state=random_state)
+                numeric_cols = x_train.select_dtypes(include=['number']).columns
+                scaled_status = False
+                if normalization_method == 'Min-Max Normalization':
+                    scaler = MinMaxScaler()
+                    scaled_status = True
+                elif normalization_method == 'Z-Score Standardization':
+                    scaler = StandardScaler()
+                    scaled_status = True
+                elif normalization_method == 'Robust Scaling':
+                    scaler = RobustScaler()
+                    scaled_status = True
+                else:
+                    scaler = None
+
+                if scaler:
+                    x_train[numeric_cols] = scaler.fit_transform(x_train[numeric_cols])
+                    x_test[numeric_cols] = scaler.transform(x_test[numeric_cols])
+
+                st.session_state['dataset_split'] = {
+                    'x_train': x_train,
+                    'x_test': x_test,
+                    'y_train': y_train,
+                    'y_test': y_test,
+                    'train_size': train_size,
+                    'is_scaled': scaled_status,
+                    'norm_method': normalization_method,
+                    'norm_file': scaler if scaler is not None else None
+                }
+                st.success(':material/task_alt: Data has been split successfully!')
+                st.write(f'Training Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_train.shape, y_train.shape)
+                st.write(f'Test Set Shape ({normalization_method if scaled_status else "Unnormalized"}):', x_test.shape, y_test.shape)
+                del processed_df, x_train, x_test, y_train, y_test, X, y, numeric_cols, scaler, scaled_status
+                gc.collect()
         
-        tab1, tab2 = st.tabs(['Manual', 'Hyperparameter Tuning'])
-        with tab1:
-            with st.container(border=True, key='model_config_container'):
-                model_selection_type = 'Manual'
-                if ml_problem == 'Classification (2 Classes)':
-                    if model_choice == 'Logistic Regression':
-                        model = logr_param_selector()
-                    elif model_choice == 'Decision Tree':
-                        model = dt_c_param_selector()
-                    elif model_choice == 'Random Forest':
-                        model = rf_c_param_selector()
-                    elif model_choice == 'K-Nearest Neighbors':
-                        model = knn_c_param_selector()
-                    elif model_choice == 'Support Vector Machine':
-                        model = svc_param_selector()
-                    elif model_choice == 'Naive Bayes':
-                        model = nb_c_param_selector()
-                    elif model_choice == 'AdaBoost':
-                        model = ada_c_param_selector()
-                    elif model_choice == 'Gradient Boosting':
-                        model = gb_c_param_selector()
-                    elif model_choice == 'Multi-Layer Perceptron (Neural Network)':
-                        model = mlp_c_param_selector()
+    # B. Model Selection
+    st.write(''); st.write('')
+    st.subheader(':material/autorenew: Model Selection')
+    st.write('Choose the most suitable machine learning model for your problem. Select between **manual configuration**, where you specify the model and its hyperparameters, or **automated hyperparameter tuning**, which optimizes the parameters using advanced search techniques. The hyperparameter tuning process allows you to define categorical and numerical hyperparameters, set search boundaries, specify cross-validation folds, choose an evaluation metric, and define the number of iterations for **Tree-structured Parzen Estimator (TPE)** optimization.')
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        ml_problem = st.selectbox('**Machine Learning Problem**', ['Classification (2 Classes)', 'Regression'])
+    with col2:
+        if ml_problem == 'Classification (2 Classes)':
+            model_choice = st.selectbox('**Select Model**', ['Logistic Regression', 'Decision Tree', 'Random Forest', 'K-Nearest Neighbors', 'Support Vector Machine', 'Naive Bayes', 'AdaBoost', 'Gradient Boosting', 'Multi-Layer Perceptron (Neural Network)'])
+        else:
+            model_choice = st.selectbox('**Select Model**', ['Linear Regression', 'Lasso Regression', 'Ridge Regression', 'Decision Tree', 'Random Forest', 'K-Nearest Neighbors', 'Support Vector Machine', 'AdaBoost', 'Gradient Boosting', 'Multi-Layer Perceptron (Neural Network)'])
+    
+    tab1, tab2 = st.tabs(['Manual', 'Hyperparameter Tuning'])
+    with tab1:
+        with st.container(border=True, key='model_config_container'):
+            model_selection_type = 'Manual'
+            if ml_problem == 'Classification (2 Classes)':
+                if model_choice == 'Logistic Regression':
+                    model = logr_param_selector()
+                elif model_choice == 'Decision Tree':
+                    model = dt_c_param_selector()
+                elif model_choice == 'Random Forest':
+                    model = rf_c_param_selector()
+                elif model_choice == 'K-Nearest Neighbors':
+                    model = knn_c_param_selector()
+                elif model_choice == 'Support Vector Machine':
+                    model = svc_param_selector()
+                elif model_choice == 'Naive Bayes':
+                    model = nb_c_param_selector()
+                elif model_choice == 'AdaBoost':
+                    model = ada_c_param_selector()
+                elif model_choice == 'Gradient Boosting':
+                    model = gb_c_param_selector()
+                elif model_choice == 'Multi-Layer Perceptron (Neural Network)':
+                    model = mlp_c_param_selector()
+            else:
+                if model_choice == 'Linear Regression':
+                    model = lr_param_selector()
+                elif model_choice == 'Lasso Regression':
+                    model = lasso_param_selector()
+                elif model_choice == 'Ridge Regression':
+                    model = ridge_param_selector()
+                elif model_choice == 'Decision Tree':
+                    model = dt_r_param_selector()
+                elif model_choice == 'Random Forest':
+                    model = rf_r_param_selector()
+                elif model_choice == 'K-Nearest Neighbors':
+                    model = knn_r_param_selector()
+                elif model_choice == 'Support Vector Machine':
+                    model = svr_param_selector()
+                elif model_choice == 'AdaBoost':
+                    model = ada_r_param_selector()
+                elif model_choice == 'Gradient Boosting':
+                    model = gb_r_param_selector()
+                elif model_choice == 'Multi-Layer Perceptron (Neural Network)':
+                    model = mlp_r_param_selector()
+            
+            if st.button(label='Train Model', icon=':material/autorenew:', use_container_width=True):
+                if st.session_state['dataset_split']['x_train'] is None:
+                    st.error(':material/error: **Please split the data before training the model**.')
+                elif ml_problem == 'Classification (2 Classes)' and st.session_state['dataset_split']['y_train'].dtype not in ['bool', 'boolean']:
+                    st.error(':material/error: **Selected dependent feature must be boolean type for classification problem**.')
                 else:
-                    if model_choice == 'Linear Regression':
-                        model = lr_param_selector()
-                    elif model_choice == 'Lasso Regression':
-                        model = lasso_param_selector()
-                    elif model_choice == 'Ridge Regression':
-                        model = ridge_param_selector()
-                    elif model_choice == 'Decision Tree':
-                        model = dt_r_param_selector()
-                    elif model_choice == 'Random Forest':
-                        model = rf_r_param_selector()
-                    elif model_choice == 'K-Nearest Neighbors':
-                        model = knn_r_param_selector()
-                    elif model_choice == 'Support Vector Machine':
-                        model = svr_param_selector()
-                    elif model_choice == 'AdaBoost':
-                        model = ada_r_param_selector()
-                    elif model_choice == 'Gradient Boosting':
-                        model = gb_r_param_selector()
-                    elif model_choice == 'Multi-Layer Perceptron (Neural Network)':
-                        model = mlp_r_param_selector()
+                    model.fit(st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                    st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
+                    st.success(':material/task_alt: Model has been trained successfully')
+                    del model
+                    gc.collect()
 
-                if st.button(label='Train Model', icon=':material/autorenew:', use_container_width=True):
-                    if st.session_state['dataset_split']['x_train'] is None:
-                        st.error(':material/error: **Please split the data before training the model**.')
-                    elif ml_problem == 'Classification (2 Classes)' and st.session_state['dataset_split']['y_train'].dtype not in ['bool', 'boolean']:
-                        st.error(':material/error: **Selected dependent feature must be boolean type for classification problem**.')
-                    else:
-                        model.fit(st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
-                        st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
-                        st.success(':material/task_alt: Model has been trained successfully')
-                        del model
-                        gc.collect()
+    with tab2:
+        with st.container(border=True, key='model_tuning_container'):
+            model_selection_type = 'Hyperparameter Tuning'
+            if ml_problem == 'Classification (2 Classes)':
+                param_range = get_c_param_range(model_choice)
+                cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
+                scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision'])
+                n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
+                param_range['cv'] = cv
+                param_range['scoring'] = scoring
+                param_range['n_trials'] = n_trials
 
-        with tab2:
-            with st.container(border=True, key='model_tuning_container'):
-                model_selection_type = 'Hyperparameter Tuning'
-                if ml_problem == 'Classification (2 Classes)':
-                    param_range = get_c_param_range(model_choice)
-                    cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
-                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision'])
-                    n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
-                    param_range['cv'] = cv
-                    param_range['scoring'] = scoring
-                    param_range['n_trials'] = n_trials
-
+            else:
+                param_range = get_r_param_range(model_choice)
+                cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
+                scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['neg_mean_absolute_error', 'neg_root_mean_squared_error', 'neg_mean_squared_error', 'r2'])
+                n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
+                param_range['cv'] = cv
+                param_range['scoring'] = scoring
+                param_range['n_trials'] = n_trials
+            
+            if st.button('Run Hyperparameter Tuning and Train Model', icon=':material/autorenew:', use_container_width=True):
+                if st.session_state['dataset_split']['x_train'] is None:
+                    st.error(':material/error: **Please split the data before training the model**.')
+                elif ml_problem == 'Classification (2 Classes)' and st.session_state['dataset_split']['y_train'].dtype not in ['bool', 'boolean']:
+                    st.error(':material/error: **Selected dependent feature must be boolean type for classification problem**.')
+                elif any(isinstance(value, list) and not value for value in param_range.values()):
+                    st.error(':material/error: **Please fill in all the hyperparameter tuning values**.')
                 else:
-                    param_range = get_r_param_range(model_choice)
-                    cv = st.number_input('**Cross-validation Folds (2 - 10)** -> Number of folds for cross-validation', min_value=2, max_value=10, value=5)
-                    scoring = st.selectbox('**Scoring Metric** -> Evaluation metric for model selection', ['neg_mean_absolute_error', 'neg_root_mean_squared_error', 'neg_mean_squared_error', 'r2'])
-                    n_trials = st.number_input('**Number of Iterations (5 - 1000)** -> Number of search iterations for TPE optimization', min_value=5, max_value=1000, value=50)
-                    param_range['cv'] = cv
-                    param_range['scoring'] = scoring
-                    param_range['n_trials'] = n_trials
-                
-                if st.button('Run Hyperparameter Tuning and Train Model', icon=':material/autorenew:', use_container_width=True):
-                    if st.session_state['dataset_split']['x_train'] is None:
-                        st.error(':material/error: **Please split the data before training the model**.')
-                    elif ml_problem == 'Classification (2 Classes)' and st.session_state['dataset_split']['y_train'].dtype not in ['bool', 'boolean']:
-                        st.error(':material/error: **Selected dependent feature must be boolean type for classification problem**.')
-                    elif any(isinstance(value, list) and not value for value in param_range.values()):
-                        st.error(':material/error: **Please fill in all the hyperparameter tuning values**.')
+                    if ml_problem == 'Classification (2 Classes)':
+                        model = get_best_c_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
                     else:
-                        if ml_problem == 'Classification (2 Classes)':
-                            model = get_best_c_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
-                        else:
-                            model = get_best_r_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
-                        
-                        model.fit(st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
-                        st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
-                        st.success('Model has been tuned and trained successfully with Tree-structured Parzen Estimator (TPE) algorithm.')
-                        del model
-                        gc.collect()
+                        model = get_best_r_model(model_choice, param_range, st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                    
+                    model.fit(st.session_state['dataset_split']['x_train'], st.session_state['dataset_split']['y_train'])
+                    st.session_state['model_detail'] = {'train_status': True, 'model_selection': model_selection_type, 'problem': ml_problem, 'model': model, 'model_name': model_choice, 'model_params': model.get_params(), 'used_dataset': st.session_state['dataset_split']}
+                    st.success('Model has been tuned and trained successfully with Tree-structured Parzen Estimator (TPE) algorithm.')
+                    del model
+                    gc.collect()
                             
     # C. Model Performance
     st.write(''); st.write('')
@@ -284,22 +284,12 @@ else: # Main Code Start From Here
             # 4. Distribution Plot (KDE) of Predictions vs Actual
             plot_kde(selected_y, y_pred)
 
-        # Download Model Button
-        buffer = io.BytesIO()
-        joblib.dump(model, buffer)
-        buffer.seek(0)
-        if ml_problem == 'Classification (2 Classes)':
-            model_filename = 'sklearn_classifier_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.h5'
-        else:
-            model_filename = 'sklearn_regressor_' + model_name.lower().replace(' ', '_').replace('-', '_') + '.h5'
-        st.download_button(
-            label='Download Model',
-            icon=':material/download:',
-            data=buffer,
-            file_name=model_filename,
-            mime='application/octet-stream',
-            use_container_width=True
+        # Download Model Button        
+        download_model_and_scaler(
+            model = st.session_state['model_detail']['model'],
+            model_name = st.session_state['model_detail']['model_name'],
+            is_scaled = st.session_state['dataset_split']['is_scaled'],
+            scaler = st.session_state['dataset_split'].get('norm_file')
         )
-
     else:
         st.warning(':material/warning: **The model performance metrics are based on the latest model trained**. If you have not trained a model yet, please train a model first.')
