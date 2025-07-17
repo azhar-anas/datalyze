@@ -10,7 +10,7 @@ apply_global_style()
 
 # Page Header 
 st.title(':material/handyman: Feature Engineering')
-# st.write('Feature Engineering is a key step in the data preparation process, where raw data is transformed into meaningful features that improve model performance. This page provides tools to allowing you to optimize your dataset for machine learning tasks.')
+st.write('Feature Engineering is a key step in the data preparation process, where raw data is transformed into meaningful features that improve model performance. This page provides tools to allowing you to optimize your dataset for machine learning tasks.')
 
 if 'current_dataset' not in st.session_state: # Ensure that the dataset has been uploaded
     st.warning(':material/warning: **No Dataset Found**. Please upload your dataset on the *Upload Dataset* page.')
