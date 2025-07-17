@@ -34,7 +34,7 @@ def download_eda_report_button(report, df_type):
     export_html = report.to_html()
     st.download_button(
         label='Download EDA Report', 
-        icon=':material/download:', 
+        icon=':material/download:',
         data=export_html, 
         file_name=f'eda_report_{df_type}.html', 
         key=f'eda_report_{df_type}', 
@@ -78,7 +78,7 @@ def show_interactive_scatter_plot(selected_df):
                 st.warning(':material/warning: **Invalid Selection**. X-axis, Y-axis, and Color columns must be different.')
             else:
                 st.markdown(
-                f"<div style='text-align: center;'><b>Scatter Plot of {x_col} vs {y_col}</b></div>",
+                f"<div style='text-align: center;'><b>{x_col} vs {y_col} Interaction</b></div>",
                 unsafe_allow_html=True
                 )
                 if color_col != 'None':
