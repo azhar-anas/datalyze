@@ -37,12 +37,12 @@ with tab2:
         st.info('''
         - **Instant Data Preview**: View the dataset to confirm data structure before proceeding.
         - **Automatic Data Recognition**: The system intelligently detects dataset information and structure.
-        - **Data Revert & Deletion**: Need to start fresh? Revert back or delete the uploaded dataset with a single click.  
+        - **Data Revert**: Need to start fresh? Revert back the uploaded dataset with a single click.  
         ''')
     with col3:
         # 2. Exploratory Data Analysis
         st.markdown('#### :material/bar_chart_4_bars: Exploratory Data Analysis')
-        st.write('Gain deeper insights into your dataset with **automated EDA reports**. Datalyze quickly generates summaries that highlight patterns, trends, and key statistics.')
+        st.write('Gain deeper insights into your dataset with **Automated EDA Reports** & **Interactive Visualization**. Datalyze quickly generates summaries that highlight patterns, trends, and key statistics.')
         st.info('''
         - **Data Assessing**: Check for missing values, duplicates, and more.
         - **Descriptive Statistics**: Show mean, median, mode, and other statistical measures.
@@ -69,7 +69,7 @@ with tab2:
         - **Renaming Features**: Standardize column names for better readability.  
         - **Feature Addition**: Create new features using basic math and polynomial transformations. 
         - **Feature Removal**: Remove irrelevant or redundant columns.  
-        - **One-Hot Encoding**: Convert multi-categorical data into numerical representations.  
+        - **Feature Encoding**: Convert multi-categorical data into boolean or numerical representations.  
         ''')
 
     st.write(''); st.write('')
@@ -85,7 +85,7 @@ with tab2:
         - **Manual & Automated Hyperparameter Tuning**: Optimize models with either manual settings or  
         **TPE-based tuning** for automated best-parameter selection.  
         - **Performance Metrics Dashboard**: Evaluate model accuracy, precision, recall, F1-score, and other metrics.  
-        - **Model Export**: Download trained models in `.h5` format for deployment or further analysis.  
+        - **Model Export**: Download trained models and scalers in `.pkl` format for deployment or further analysis.  
         ''')
     with col3:
         st.image('assets/images/logo_name_vertikal_500px.png', use_container_width=True)
