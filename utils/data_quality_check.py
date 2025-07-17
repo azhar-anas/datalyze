@@ -15,7 +15,7 @@ def find_duplicate_values(dataframe):
     return duplicates, num_duplicates, percent_duplicates
 
 def find_outliers(df):
-    if st.session_state['outliers_removed'] == False:
+    if st.session_state['current_dataset']['outliers_removed'] == False:
         numeric_df = df.select_dtypes(include=['number'])
         Q1 = numeric_df.quantile(0.25)
         Q3 = numeric_df.quantile(0.75)
