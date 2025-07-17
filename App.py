@@ -56,7 +56,7 @@ def show_auth():
                     gc.collect()
                     st.rerun()
                 else:
-                    st.error(":material/error: Username atau password salah.")
+                    st.error(":material/error: Invalid Username or Password.")
                 del users
                 gc.collect()
             except Exception as e:
