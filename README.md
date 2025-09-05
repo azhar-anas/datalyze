@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/images/logo_name_horizontal_817px.png" alt="Datalyze Header" width="700">
+  <img src="assets/images/logo_name_horizontal_817px.png" alt="Datalyze Header" width="100%">
 </p>
 
 <h1 align="center">Datalyze</h1>
