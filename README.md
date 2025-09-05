@@ -19,12 +19,15 @@ Datalyze is a powerful no-code data analytics platform that simplifies the entir
 
 ---
 
-## 🚀 Features
+## 🚀 Key Capabilities
 
-- **Data Import & Management**: Upload datasets in CSV or Excel format, with automatic data structure detection and data preview.
-- **Exploratory Data Analysis (EDA)**: Automated data profiling, missing value analysis, descriptive statistics, and interactive visualizations. Export EDA reports in `.html` format.
-- **Data Cleaning & Feature Engineering**: Modify feature types, handle missing values, remove duplicates, detect outliers, and perform feature selection.
-- **Machine Learning & Model Optimization**: Configure datasets, train-test split, and normalization. Select regression or classification models, tune hyperparameters with the TPE method, and evaluate models. Export trained models in `.joblib` format.
+1.  Upload and preview **CSV/Excel files** up to **200 MB** with automatic schema detection and basic statistical reporting.
+2.  Automatically generate advanced statistical reports, detect missing values, imbalanced data, correlation, and create visualizations.
+3.  Edit column data types, handle missing values, remove duplicates, and detect/remove outliers.
+4.  Rename, transform, delete, and encode specific columns for modeling.
+5.  Train **regression** and **binary classification models** with scaling, train-test split, and hyperparameter tuning (manual or automated via the **Tree-structured Parzen Estimator (TPE)** algorithm).
+6.  Download the optimized model as a **.pkl** file for reuse or deployment.
+7.  Export **Exploratory Data Analysis reports** (HTML), data visualizations (images), and the cleaned dataset (CSV) for further analysis or presentation.
 
 ---
 
