@@ -60,7 +60,7 @@ For a local setup, ensure you have **Python 3.11** installed. Then, follow these
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/azhar-anas/datalyze.git](https://github.com/azhar-anas/datalyze.git)
+    git clone https://github.com/azhar-anas/datalyze.git
     ```
 
 2.  **Install dependencies:**
