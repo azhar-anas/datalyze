@@ -25,7 +25,7 @@ with tab1:
     - **Export & Share**: **Download reports, models, and visualizations** for further analysis or presentation.
     ''')
     
-    st.caption('Copyright © Datalyze 2025')
+    st.caption('Copyright © 2025 Azhar Anas')
 
 # Tab 2: Key Features
 with tab2:
@@ -96,4 +96,5 @@ with tab2:
         if st.button('Get Started', icon=':material/prompt_suggestion:', key='footer_button'):
             st.switch_page('pages/1_upload_dataset.py')
             
-    st.caption('Copyright © Datalyze 2025')
+    st.caption('Copyright © 2025 Azhar Anas')
+
