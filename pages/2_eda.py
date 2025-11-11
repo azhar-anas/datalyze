@@ -33,7 +33,7 @@ else: # Main Code Start From Here
         # Show Generated EDA Report
         if not df_report['report_status']:
             st.warning(':material/warning: **EDA Report Unavailable**. Your dataset appears to be new or recently modified. Click the button below to proceed.')
-            if st.button(':material/description: Generate EDA Report', key='eda_report_btn', use_container_width=True, help='Generate EDA Report for Current Dataset'):
+            if st.button(':material/description: Generate EDA Report', key='eda_report_btn', use_container_width=True):
                 generate_eda_report(selected_df, df_report)
                 gc.collect()
                 st.rerun()
