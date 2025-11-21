@@ -23,7 +23,8 @@ def download_model_and_scaler(model, model_name, ml_problem, data_type, min_max_
             for col in data_type
         ],
         'target': {
-            'name': target_var_name
+            'name': target_var_name,
+            'type': data_type.get(target_var_name),
         },
         'case': ml_problem
     }
@@ -38,7 +39,7 @@ def download_model_and_scaler(model, model_name, ml_problem, data_type, min_max_
         # Create a zip file containing model, scaler, and metadata
         with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
             zip_file.writestr(
-                f'sklearn_classifier_{model_name.lower().replace(" ", "_").replace("-", "_")}.pkl',
+                f'sklearn_{model_name.lower().replace(" ", "_").replace("-", "_")}.pkl',
                 model_buffer.getvalue()
             )
             zip_file.writestr('scaler.pkl', scaler_buffer.getvalue())
@@ -47,10 +48,10 @@ def download_model_and_scaler(model, model_name, ml_problem, data_type, min_max_
         # Create a zip file containing only the model and metadata
         with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
             zip_file.writestr(
-                f'sklearn_classifier_{model_name.lower().replace(" ", "_").replace("-", "_")}.pkl',
+                f'sklearn_{model_name.lower().replace(" ", "_").replace("-", "_")}.pkl',
                 model_buffer.getvalue()
             )
-            zip_file.writestr('dataset_metadata.json', json.dumps(metadata, indent=2))
+            zip_file.writestr('metadata.json', json.dumps(metadata, indent=2))
     zip_buffer.seek(0)
 
     # Download button for the zip file
