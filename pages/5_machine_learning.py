@@ -286,10 +286,14 @@ else: # Main Code Start From Here
 
         # Download Model Button        
         download_model_and_scaler(
-            model = st.session_state['model_detail']['model'],
-            model_name = st.session_state['model_detail']['model_name'],
-            is_scaled = st.session_state['dataset_split']['is_scaled'],
-            scaler = st.session_state['dataset_split'].get('norm_file')
+            model = model,
+            model_name = model_name,
+            ml_problem = ml_problem,
+            data_type = x_train.dtypes.astype(str).to_dict(),
+            min_max_values = x_train.agg(['min', 'max']).to_dict(),
+            target_var_name =  target,
+            is_scaled = used_dataset['is_scaled'],
+            scaler = used_dataset.get('norm_file'),
         )
     else:
         st.warning(':material/warning: **The model performance metrics are based on the latest model trained**. If you have not trained a model yet, please train a model first.')
