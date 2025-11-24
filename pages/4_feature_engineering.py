@@ -148,7 +148,7 @@ else: # Main Code Start From Here
                             st.error(':material/error: **No features selected**. Please select at least one feature to encode.')
                         else:
                             df_processed = df.copy()
-                            df_processed = pd.get_dummies(df_processed, columns=features_to_encode, drop_first=True)
+                            df_processed = pd.get_dummies(df_processed, columns=features_to_encode, drop_first=False)
                             for col in df_processed.select_dtypes(include=['bool']).columns:
                                 df_processed[col] = df_processed[col].astype('boolean')
                             st.session_state['current_dataset']['df_file'] = df_processed
@@ -188,3 +188,4 @@ else: # Main Code Start From Here
         st.write('')
         st.subheader(':material/table: Current Dataset')          
         display_dataset(df)    
+
